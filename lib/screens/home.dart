@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:git_explorer/screens/forums/forum.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -32,21 +33,22 @@ class _HomeState extends State<Home> {
         //   },
         //   child: Icon(Icons.add),
         // ),
-        body: StreamBuilder(
-          stream:
-          FirebaseFirestore.instance.collection('categories').snapshots(),
-          builder: (BuildContext context,
-              AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-            if(!snapshot.hasData) return const SizedBox.shrink();
-            return ListView.builder(itemCount: snapshot.data?.docs.length,itemBuilder: (BuildContext context, int index){
-              final docData = snapshot.data?.docs[index].data();
-              final dateTime = (docData!['timestamp'] as Timestamp).toDate();
-              return ListTile(
-                title: Text(dateTime.toString(), style: TextStyle(color: Colors.white),),
-              );
-            });
-          },
-        ),
+        // body: StreamBuilder(
+        //   stream:
+        //   FirebaseFirestore.instance.collection('categories').snapshots(),
+        //   builder: (BuildContext context,
+        //       AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+        //     if(!snapshot.hasData) return const SizedBox.shrink();
+        //     return ListView.builder(itemCount: snapshot.data?.docs.length,itemBuilder: (BuildContext context, int index){
+        //       final docData = snapshot.data?.docs[index].data();
+        //       final dateTime = (docData!['timestamp'] as Timestamp).toDate();
+        //       return ListTile(
+        //         title: Text(dateTime.toString(), style: TextStyle(color: Colors.white),),
+        //       );
+        //     });
+        //   },
+        // ),
+      body: Forum(),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
