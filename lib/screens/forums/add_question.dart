@@ -1,66 +1,38 @@
 import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:git_explorer/services/forum_methods.dart';
 import 'package:image_picker/image_picker.dart';
+
 import '../../components/forumComponents/text_field_input.dart';
+import '../../services/storage_methods.dart';
 
 class AddQuestionScreen extends StatefulWidget {
-  const AddQuestionScreen({Key? key}) : super(key: key);
+  final String question;
+  final bool editMode;
+  final String questionId;
+
+  const AddQuestionScreen(
+      {Key? key,
+      this.question = '',
+      this.editMode = false,
+      this.questionId = ''})
+      : super(key: key);
 
   @override
   _AddQuestionScreen createState() => _AddQuestionScreen();
 }
 
 class _AddQuestionScreen extends State<AddQuestionScreen> {
-  final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _bioController = TextEditingController();
+  final TextEditingController _questionController = TextEditingController();
   bool _isLoading = false;
   Uint8List? _image;
 
   @override
   void dispose() {
     super.dispose();
-    _emailController.dispose();
-    _passwordController.dispose();
-    _usernameController.dispose();
+    _questionController.dispose();
   }
-
-  // void signUpUser() async {
-  //   // set loading to true
-  //   setState(() {
-  //     _isLoading = true;
-  //   });
-  //
-  //   // signup user using our authmethodds
-  //   String res = await AuthMethods().signUpUser(
-  //       email: _emailController.text,
-  //       password: _passwordController.text,
-  //       username: _usernameController.text,
-  //       bio: _bioController.text,
-  //       file: _image!);
-  //   // if string returned is sucess, user has been created
-  //   if (res == "success") {
-  //     setState(() {
-  //       _isLoading = false;
-  //     });
-  //     // navigate to the home screen
-  //     Navigator.of(context).pushReplacement(
-  //       MaterialPageRoute(
-  //         builder: (context) => const ResponsiveLayout(
-  //           mobileScreenLayout: MobileScreenLayout(),
-  //           webScreenLayout: WebScreenLayout(),
-  //         ),
-  //       ),
-  //     );
-  //   } else {
-  //     setState(() {
-  //       _isLoading = false;
-  //     });
-  //     // show the error
-  //     showSnackBar(context, res);
-  //   }
-  // }
 
   pickImage(ImageSource source) async {
     final ImagePicker _imagePicker = ImagePicker();
@@ -81,9 +53,14 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.editMode) {
+      _questionController.text = widget.question;
+    }
     return Scaffold(
       appBar: AppBar(
-        title: Text('Post Question'),
+        title: widget.editMode
+            ? const Text('Edit Question')
+            : const Text('Post Question'),
       ),
       resizeToAvoidBottomInset: false,
       body: SafeArea(
@@ -108,7 +85,7 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
               ),
               TextFieldInput(
                 textInputType: TextInputType.text,
-                textEditingController: _usernameController,
+                textEditingController: _questionController,
                 maxLines: 15,
               ),
               const SizedBox(
@@ -158,16 +135,18 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
                           ),
                         )
                       : Column(
-                        children: [
-                          const Align(
-                            child: Text(
-                              "Attach image",
-                              style: TextStyle(fontSize: 18),
+                          children: [
+                            const Align(
+                              child: Text(
+                                "Attach image",
+                                style: TextStyle(fontSize: 18),
+                              ),
+                              alignment: Alignment.centerLeft,
                             ),
-                            alignment: Alignment.centerLeft,
-                          ),
-                          const SizedBox(height: 20,),
-                          InkWell(
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            InkWell(
                               onTap: selectImage,
                               child: Align(
                                 alignment: Alignment.centerLeft,
@@ -186,8 +165,8 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
                                 ),
                               ),
                             ),
-                        ],
-                      )
+                          ],
+                        )
                 ],
               ),
               const SizedBox(
@@ -213,7 +192,35 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
                       ),
                       color: Colors.blue),
                 ),
-                onTap: () {},
+                onTap: () async {
+                  setState(() {
+                    _isLoading = true;
+                  });
+
+                  String photoUrl = '';
+                  if (_image != null) {
+                    photoUrl =
+                        await StorageMethods().uploadImageToStorage(_image!);
+                  }
+
+                  if (widget.editMode) {
+                    await ForumMethods().editQuestion(
+                        newQuestion: _questionController.text,
+                        newImage: photoUrl,
+                        questionId: widget.questionId);
+                  }
+
+                  if (!widget.editMode) {
+                    await ForumMethods().postQuestion(
+                        question: _questionController.text, imageUrl: photoUrl);
+                  }
+                  setState(() {
+                    _questionController.clear();
+                    _image = null;
+                    _isLoading = false;
+                  });
+                  Navigator.pop(context);
+                },
               ),
             ],
           ),

@@ -28,23 +28,28 @@ class _ForumState extends State<Forum> {
           stream: FirebaseFirestore.instance.collection('questions').snapshots(),
           builder: (context,
               AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-            log(snapshot.data!.docs[0].toString());
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
                 child: CircularProgressIndicator(),
               );
             }
-            return ListView.builder(
-              itemCount: snapshot.data!.docs.length,
-              itemBuilder: (ctx, index) => Container(
-                margin: const EdgeInsets.symmetric(
-                  vertical: 1,
-                ),
-                child:  QuestionCard(
-                  snap: snapshot.data!.docs[index].data(),
-                ),
-              ),
-            );
+
+            if(snapshot != null) {
+              return ListView.builder(
+                itemCount: snapshot.data!.docs.length,
+                itemBuilder: (ctx, index) =>
+                    Container(
+                      margin: const EdgeInsets.symmetric(
+                        vertical: 1,
+                      ),
+                      child: QuestionCard(
+                        snap: snapshot.data!.docs[index].data(),
+                      ),
+                    ),
+              );
+            }else{
+              return const Text('');
+            }
           },
         ),
       ),

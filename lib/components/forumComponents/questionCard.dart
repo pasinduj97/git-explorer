@@ -1,10 +1,19 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:git_explorer/services/forum_methods.dart';
+import 'package:intl/intl.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+import '../../screens/forums/add_question.dart';
 
 class QuestionCard extends StatefulWidget {
-  final Map<String, dynamic> snap;
-  const QuestionCard({Key? key,  required this.snap,}) : super(key: key);
+  final snap;
+
+  const QuestionCard({
+    Key? key,
+    required this.snap,
+  }) : super(key: key);
 
   @override
   _QuestionCardState createState() => _QuestionCardState();
@@ -15,11 +24,11 @@ class _QuestionCardState extends State<QuestionCard> {
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
-        // border: Border.all(
-        //   // color: Color.fromRGBO(0, 0, 0, 1),
-        // ),
-        // color: Color.fromRGBO(0, 0, 0, 1),
-      ),
+          // border: Border.all(
+          //   // color: Color.fromRGBO(0, 0, 0, 1),
+          // ),
+          // color: Color.fromRGBO(0, 0, 0, 1),
+          ),
       padding: const EdgeInsets.symmetric(
         vertical: 10,
       ),
@@ -32,11 +41,10 @@ class _QuestionCardState extends State<QuestionCard> {
             ).copyWith(right: 0),
             child: Row(
               children: <Widget>[
-                const CircleAvatar(
+                CircleAvatar(
                   radius: 16,
-                  backgroundImage: NetworkImage(
-                      "https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=998&q=80"
-                  ),
+                  backgroundImage:
+                      NetworkImage(widget.snap['image'].toString()),
                 ),
                 Expanded(
                   child: Padding(
@@ -46,10 +54,10 @@ class _QuestionCardState extends State<QuestionCard> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const <Widget>[
-                      Text(
-                         'TestUser',
-                          style: TextStyle(
+                      children: <Widget>[
+                        Text(
+                          widget.snap['username'].toString(),
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -57,45 +65,37 @@ class _QuestionCardState extends State<QuestionCard> {
                     ),
                   ),
                 ),
-                true
-                    ? IconButton(
-                  onPressed: () {
-                    showDialog(
-                      useRootNavigator: false,
-                      context: context,
-                      builder: (context) {
-                        return Dialog(
-                          child: ListView(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 16),
-                              shrinkWrap: true,
-                              children: [
-                                'Delete',
-                                'Edit'
-                              ]
-                                  .map(
-                                    (e) => InkWell(
-                                    child: Container(
-                                      padding:
-                                      const EdgeInsets.symmetric(
-                                          vertical: 12,
-                                          horizontal: 16),
-                                      child: Text(e),
-                                    ),
-                                    onTap: () {
-                                      log(e);
-                                      // remove the dialog box
-                                      Navigator.of(context).pop();
-                                    }),
-
-                              )
-                                  .toList()),
-                        );
-                      },
-                    );
-                  },
-                  icon: const Icon(Icons.more_vert),
-                )
+                widget.snap['uid'].toString() ==
+                        FirebaseAuth.instance.currentUser!.uid
+                    ? Row(
+                        children: <Widget>[
+                          IconButton(
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => AddQuestionScreen(
+                                              question: widget.snap["question"]
+                                                  .toString(),
+                                          editMode: true,
+                                          questionId: widget.snap["questionId"].toString(),
+                                            )));
+                              },
+                              icon: const Icon(
+                                Icons.edit,
+                                color: Colors.grey,
+                              )),
+                          IconButton(
+                              onPressed: () async {
+                                await ForumMethods().deleteQuestion(
+                                    widget.snap['questionId'].toString());
+                              },
+                              icon: const Icon(
+                                Icons.delete,
+                                color: Colors.redAccent,
+                              )),
+                        ],
+                      )
                     : Container(),
               ],
             ),
@@ -114,14 +114,18 @@ class _QuestionCardState extends State<QuestionCard> {
             child: Stack(
               alignment: Alignment.center,
               children: [
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.35,
-                  width: double.infinity,
-                  child: Image.network(
-                    "https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=998&q=80",
-                    fit: BoxFit.cover,
-                  ),
-                ),
+                widget.snap['image'] != ''
+                    ? SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.35,
+                        width: double.infinity,
+                        child: Image.network(
+                          widget.snap['image'].toString(),
+                          fit: BoxFit.cover,
+                        ),
+                      )
+                    : const SizedBox(
+                        height: 1,
+                      ),
                 // AnimatedOpacity(
                 //   duration: const Duration(milliseconds: 200),
                 //   opacity: isLikeAnimating ? 1 : 0,
@@ -157,22 +161,19 @@ class _QuestionCardState extends State<QuestionCard> {
                     top: 8,
                   ),
                   child: RichText(
-                    text: const TextSpan(
-                      style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
+                    text: TextSpan(
+                      style: const TextStyle(color: Colors.black, fontSize: 20),
                       children: [
-                        TextSpan(
-                          text: 'lorem ipsum',
-                        ),
+                        TextSpan(text: widget.snap['question'].toString()),
                       ],
                     ),
                   ),
                 ),
                 Container(
-                  child: const Text(
-                    // DateFormat.yMMMd()
-                    //     .format(widget.snap['datePublished'].toDate()),
-                    '2014-2-3',
-                    style: TextStyle(
+                  child: Text(
+                    DateFormat.yMMMd()
+                        .format(widget.snap['timestamp'].toDate()),
+                    style: const TextStyle(
                       color: Colors.grey,
                     ),
                   ),
