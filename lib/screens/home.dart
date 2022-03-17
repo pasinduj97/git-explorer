@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:git_explorer/screens/forums/forum.dart';
+import 'package:git_explorer/screens/note/notes.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -14,7 +15,10 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
 
   int _selectedIndex = 0;
-
+  final List<Widget> _children = [
+    Forum(),
+    Notes()
+  ];
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -48,16 +52,16 @@ class _HomeState extends State<Home> {
         //     });
         //   },
         // ),
-      body: Forum(),
+      body: _children[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            label: 'Home',
+            label: 'My Learning',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.business),
-            label: 'Business',
+            label: 'My Notes',
           ),
         ],
         currentIndex: _selectedIndex,

@@ -18,7 +18,8 @@ class _ForumState extends State<Forum> {
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(title: Text("Forum"),),
-      floatingActionButton: FloatingActionButton(onPressed: () {    Navigator.push(
+      floatingActionButton: FloatingActionButton(onPressed: () {
+        Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => AddQuestionScreen())
