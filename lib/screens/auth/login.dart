@@ -1,12 +1,9 @@
-import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:git_explorer/screens/home.dart';
-
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 import '../../components/rounded_btn.dart';
@@ -23,7 +20,6 @@ class _LoginState extends State<Login> {
   late String email;
   late String password;
 
-
   @override
   Widget build(BuildContext context) {
     return ModalProgressHUD(
@@ -37,31 +33,59 @@ class _LoginState extends State<Login> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                const SizedBox(
+                  height: 20,
+                ),
                 Center(
                   child: SizedBox(
-                      width: 175,
-                      height: 175,
-                      child: SvgPicture.asset('images/login.svg')
-                  ),
+                      width: 150,
+                      height: 150,
+                      child: SvgPicture.asset('images/gitE.svg')),
                 ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Center(
+                    child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Text(
+                      "Git",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 36,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 10),
+                      child: Text(
+                        "Explore",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 36,
+                        ),
+                      ),
+                    ),
+                  ],
+                )),
                 const Padding(
                   padding: EdgeInsets.fromLTRB(20, 15, 20, 8),
-                  child: Text('Login',
+                  child: Text(
+                    'Login',
                     style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.w600,
-                        fontSize: 20
-                    ),
+                        fontSize: 20),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  child: Text('Please sign in to continue.',
+                  child: Text(
+                    'Please sign in to continue.',
                     style: TextStyle(
                         color: Colors.grey[600],
                         fontWeight: FontWeight.w400,
-                        fontSize: 13
-                    ),
+                        fontSize: 13),
                   ),
                 ),
                 Padding(
@@ -73,7 +97,10 @@ class _LoginState extends State<Login> {
                       children: <Widget>[
                         const Text(
                           'E-mail',
-                          style: TextStyle(fontWeight: FontWeight.w300, fontSize: 13, color: Colors.white),
+                          style: TextStyle(
+                              fontWeight: FontWeight.w300,
+                              fontSize: 13,
+                              color: Colors.white),
                         ),
                         const SizedBox(
                           height: 10,
@@ -81,8 +108,7 @@ class _LoginState extends State<Login> {
                         TextField(
                           style: (const TextStyle(
                               color: Colors.white,
-                              fontWeight: FontWeight.w400
-                          )),
+                              fontWeight: FontWeight.w400)),
                           keyboardType: TextInputType.emailAddress,
                           cursorColor: Colors.white,
                           obscureText: false,
@@ -92,8 +118,10 @@ class _LoginState extends State<Login> {
                             filled: true,
                             prefixIcon: Image.asset('images/icon_email.png'),
                             focusedBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(color: Color(0xff14DAE2), width: 2.0),
-                              borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                              borderSide: BorderSide(
+                                  color: Color(0xff14DAE2), width: 2.0),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20.0)),
                             ),
                           ),
                           onChanged: (value) {
@@ -105,22 +133,24 @@ class _LoginState extends State<Login> {
                   ),
                 ),
                 Container(
-                  margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                  margin:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       const Text(
                         'Password',
-                        style: TextStyle(fontWeight: FontWeight.w300, fontSize: 13, color: Colors.white),
+                        style: TextStyle(
+                            fontWeight: FontWeight.w300,
+                            fontSize: 13,
+                            color: Colors.white),
                       ),
                       const SizedBox(
                         height: 10,
                       ),
                       TextField(
                         style: (const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w400
-                        )),
+                            color: Colors.white, fontWeight: FontWeight.w400)),
                         obscureText: true,
                         cursorColor: Colors.white,
                         decoration: InputDecoration(
@@ -129,8 +159,10 @@ class _LoginState extends State<Login> {
                           filled: true,
                           prefixIcon: Image.asset('images/icon_lock.png'),
                           focusedBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(color: Color(0xff14DAE2), width: 2.0),
-                            borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                            borderSide: BorderSide(
+                                color: Color(0xff14DAE2), width: 2.0),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(20.0)),
                           ),
                         ),
                         onChanged: (value) {
@@ -155,12 +187,13 @@ class _LoginState extends State<Login> {
                           final user = await _auth.signInWithEmailAndPassword(
                               email: email, password: password);
                           if (user != null) {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Home())
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                builder: (BuildContext context) => const Home(),
+                              ),
+                              (route) => false,
                             );
-                            log(user.toString());
                           }
                           setState(() {
                             showSpinner = false;
@@ -173,10 +206,9 @@ class _LoginState extends State<Login> {
                   ),
                 ),
                 const Center(
-                  child: Text('Forgot Password?',
-                    style: TextStyle(
-                        color: Color(0xff14DAE2)
-                    ),
+                  child: Text(
+                    'Forgot Password?',
+                    style: TextStyle(color: Color(0xff14DAE2)),
                   ),
                 ),
                 const SizedBox(
@@ -185,11 +217,11 @@ class _LoginState extends State<Login> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('Dont have an account?',
+                    Text(
+                      'Dont have an account?',
                       style: TextStyle(
-                          color: Colors.grey[600],
-                          fontWeight: FontWeight.w400
-                      ),),
+                          color: Colors.grey[600], fontWeight: FontWeight.w400),
+                    ),
                     FlatButton(
                       onPressed: () {
                         Navigator.push(
@@ -199,8 +231,8 @@ class _LoginState extends State<Login> {
                       },
                       child: const Text('Sign up',
                           style: TextStyle(
-                            color: Color(0xff14DAE2),)
-                      ),
+                            color: Color(0xff14DAE2),
+                          )),
                     )
                   ],
                 )

@@ -1,9 +1,8 @@
-import 'dart:developer';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:git_explorer/screens/forums/answer.dart';
 import 'package:git_explorer/services/forum_methods.dart';
 import 'package:intl/intl.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../screens/forums/add_question.dart';
 
@@ -24,11 +23,8 @@ class _QuestionCardState extends State<QuestionCard> {
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
-          // border: Border.all(
-          //   // color: Color.fromRGBO(0, 0, 0, 1),
-          // ),
-          // color: Color.fromRGBO(0, 0, 0, 1),
-          ),
+        color: Color(0xff251F34),
+      ),
       padding: const EdgeInsets.symmetric(
         vertical: 10,
       ),
@@ -37,14 +33,14 @@ class _QuestionCardState extends State<QuestionCard> {
           Container(
             padding: const EdgeInsets.symmetric(
               vertical: 4,
-              horizontal: 16,
+              horizontal: 7,
             ).copyWith(right: 0),
             child: Row(
               children: <Widget>[
                 CircleAvatar(
                   radius: 16,
                   backgroundImage:
-                      NetworkImage(widget.snap['image'].toString()),
+                      NetworkImage(widget.snap['userProfilePic'].toString()),
                 ),
                 Expanded(
                   child: Padding(
@@ -58,8 +54,7 @@ class _QuestionCardState extends State<QuestionCard> {
                         Text(
                           widget.snap['username'].toString(),
                           style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
+                              fontWeight: FontWeight.bold, color: Colors.white),
                         ),
                       ],
                     ),
@@ -77,8 +72,10 @@ class _QuestionCardState extends State<QuestionCard> {
                                         builder: (context) => AddQuestionScreen(
                                               question: widget.snap["question"]
                                                   .toString(),
-                                          editMode: true,
-                                          questionId: widget.snap["questionId"].toString(),
+                                              editMode: true,
+                                              questionId: widget
+                                                  .snap["questionId"]
+                                                  .toString(),
                                             )));
                               },
                               icon: const Icon(
@@ -96,21 +93,11 @@ class _QuestionCardState extends State<QuestionCard> {
                               )),
                         ],
                       )
-                    : Container(),
+                    : SizedBox(height: 50),
               ],
             ),
           ),
-          GestureDetector(
-            onDoubleTap: () {
-              // FireStoreMethods().likePost(
-              //   widget.snap['postId'].toString(),
-              //   user.uid,
-              //   widget.snap['likes'],
-              // );
-              // setState(() {
-              //   isLikeAnimating = true;
-              // });
-            },
+          Center(
             child: Stack(
               alignment: Alignment.center,
               children: [
@@ -124,62 +111,56 @@ class _QuestionCardState extends State<QuestionCard> {
                         ),
                       )
                     : const SizedBox(
-                        height: 1,
+                        height: 0,
                       ),
-                // AnimatedOpacity(
-                //   duration: const Duration(milliseconds: 200),
-                //   opacity: isLikeAnimating ? 1 : 0,
-                //   child: LikeAnimation(
-                //     isAnimating: isLikeAnimating,
-                //     child: const Icon(
-                //       Icons.favorite,
-                //       color: Colors.white,
-                //       size: 100,
-                //     ),
-                //     duration: const Duration(
-                //       milliseconds: 400,
-                //     ),
-                //     onEnd: () {
-                //       setState(() {
-                //         isLikeAnimating = false;
-                //       });
-                //     },
-                //   ),
-                // ),
               ],
             ),
           ),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.only(
-                    top: 8,
-                  ),
-                  child: RichText(
-                    text: TextSpan(
-                      style: const TextStyle(color: Colors.black, fontSize: 20),
-                      children: [
-                        TextSpan(text: widget.snap['question'].toString()),
-                      ],
+            child: InkWell(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Answer(
+                              questionId: widget.snap['questionId'].toString(),
+                              snap: widget.snap,
+                            )));
+              },
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.only(
+                      top: 8,
+                    ),
+                    child: RichText(
+                      text: TextSpan(
+                        style:
+                            const TextStyle(color: Colors.black, fontSize: 20),
+                        children: [
+                          TextSpan(
+                              text: widget.snap['question'].toString(),
+                              style: TextStyle(color: Colors.white)),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                Container(
-                  child: Text(
-                    DateFormat.yMMMd()
-                        .format(widget.snap['timestamp'].toDate()),
-                    style: const TextStyle(
-                      color: Colors.grey,
+                  Container(
+                    child: Text(
+                      DateFormat.yMMMd()
+                          .format(widget.snap['timestamp'].toDate()),
+                      style: const TextStyle(
+                        color: Colors.grey,
+                      ),
                     ),
+                    padding: const EdgeInsets.symmetric(vertical: 4),
                   ),
-                  padding: const EdgeInsets.symmetric(vertical: 4),
-                ),
-              ],
+                ],
+              ),
             ),
           )
         ],
