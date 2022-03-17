@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:uuid/uuid.dart';
@@ -12,22 +14,26 @@ class ForumMethods {
   }) async {
     String res = "Some error Occurred";
     try {
-      if (question.isNotEmpty || imageUrl.isNotEmpty) {
-        String questionId = const Uuid().v1();
+
+       DocumentSnapshot user = await _firestore.collection('users').doc(_auth.currentUser!.uid).get();
+
+       Map<String, dynamic> data = user.data() as Map<String, dynamic>;
+
+
+      String questionId = const Uuid().v1();
 
         await _firestore.collection("questions").doc(questionId).set({
           "question": question,
           "image": imageUrl,
           "timestamp": Timestamp.fromDate(DateTime.now()),
-          "username": _auth.currentUser!.displayName,
-          "uid": _auth.currentUser!.uid,
+          "username": data['username'],
+          "userProfilePic": data['photoUrl'],
+          "uid": data['uid'],
           "questionId": questionId,
         });
 
         res = "success";
-      } else {
-        res = "Please enter all the fields";
-      }
+
     } catch (err) {
       return err.toString();
     }
@@ -70,12 +76,14 @@ class ForumMethods {
     return res;
   }
 
-  Future<String> postSolution(String questionId, String solution, String uid,
-      String name, String profilePic) async {
+  Future<String> postSolution(String questionId, String solution, ) async {
     String res = "Some error occurred";
     try {
 
-        // if the likes list contains the user uid, we need to remove it
+      DocumentSnapshot user = await _firestore.collection('users').doc(_auth.currentUser!.uid).get();
+
+      Map<String, dynamic> data = user.data() as Map<String, dynamic>;
+
         String solutionId = const Uuid().v1();
         _firestore
             .collection('questions')
@@ -83,9 +91,9 @@ class ForumMethods {
             .collection('solutions')
             .doc(solutionId)
             .set({
-          'profilePic': profilePic,
-          'name': name,
-          'uid': uid,
+          'userProfilePic': data['photoUrl'],
+          "name": data['username'],
+          "uid": data['uid'],
           'text': solution,
           'solutionId': solutionId,
           'datePublished': DateTime.now(),

@@ -20,13 +20,22 @@ class TextFieldInput extends StatelessWidget {
     return TextField(
       controller: textEditingController,
       maxLines: maxLines,
+      cursorColor: Colors.white,
       decoration: const InputDecoration(
+        border: InputBorder.none,
+        fillColor: Color(0xfff3B324E),
         filled: true,
-        contentPadding: EdgeInsets.all(8),
-        border: OutlineInputBorder(),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Color(0xff14DAE2), width: 2.0),
+          borderRadius: BorderRadius.all(Radius.circular(20.0)),
+        ),
       ),
       keyboardType: textInputType,
       obscureText: isPass,
+      style: (const TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.w400
+      )),
     );
   }
 }
