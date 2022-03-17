@@ -69,4 +69,31 @@ class ForumMethods {
     }
     return res;
   }
+
+  Future<String> postSolution(String questionId, String solution, String uid,
+      String name, String profilePic) async {
+    String res = "Some error occurred";
+    try {
+
+        // if the likes list contains the user uid, we need to remove it
+        String solutionId = const Uuid().v1();
+        _firestore
+            .collection('questions')
+            .doc(questionId)
+            .collection('solutions')
+            .doc(solutionId)
+            .set({
+          'profilePic': profilePic,
+          'name': name,
+          'uid': uid,
+          'text': solution,
+          'solutionId': solutionId,
+          'datePublished': DateTime.now(),
+        });
+        res = 'success';
+    } catch (err) {
+      res = err.toString();
+    }
+    return res;
+  }
 }
