@@ -58,6 +58,7 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
     }
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: const Color(0xff251F34),
         title: widget.editMode
             ? const Text('Edit Question')
             : const Text('Post Question'),
@@ -65,6 +66,7 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
       resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Container(
+          color:   const Color(0xff251F34),
           padding: const EdgeInsets.symmetric(horizontal: 32),
           width: double.infinity,
           child: Column(
@@ -76,7 +78,7 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
               const Align(
                 child: Text(
                   "Enter your question",
-                  style: TextStyle(fontSize: 18),
+                  style: TextStyle(fontSize: 18, color: Colors.white),
                 ),
                 alignment: Alignment.centerLeft,
               ),
@@ -139,7 +141,7 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
                             const Align(
                               child: Text(
                                 "Attach image",
-                                style: TextStyle(fontSize: 18),
+                                style: TextStyle(fontSize: 18, color: Colors.white),
                               ),
                               alignment: Alignment.centerLeft,
                             ),
@@ -157,11 +159,8 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
                                     Icons.add_a_photo,
                                     color: Colors.white,
                                   ),
-                                  decoration: const ShapeDecoration(
-                                      color: Colors.grey,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(5.0)))),
+                                  decoration: const BoxDecoration(
+                                      color: Color(0xfff3B324E),)
                                 ),
                               ),
                             ),
@@ -190,7 +189,7 @@ class _AddQuestionScreen extends State<AddQuestionScreen> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(4)),
                       ),
-                      color: Colors.blue),
+                    color: Color(0xff14DAE2),),
                 ),
                 onTap: () async {
                   setState(() {
