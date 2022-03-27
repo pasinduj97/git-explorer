@@ -46,7 +46,7 @@ class _SolutionCardState extends State<SolutionCard> {
     return Container(
       decoration: const BoxDecoration(
           border: Border(bottom: BorderSide(color: Colors.grey))),
-      padding: const EdgeInsets.only(bottom: 20),
+      padding: const EdgeInsets.only(bottom: 20, top: 20),
       child: Row(
         children: [
           Column(
