@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:git_explorer/screens/note/add_note.dart';
-// import 'package:mynotes/pages/viewnote.dart';
+import 'package:git_explorer/screens/note/viewNotes.dart';
 
 class Notes extends StatefulWidget {
   const Notes({Key? key}) : super(key: key);
@@ -96,7 +96,12 @@ class _NotesState extends State<Notes> {
 
                 return InkWell(
                   onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => ViewNotes(data, formattedTime, snapshot.data!.docs[index].reference),),)
+                    .then((value){
+                      setState(() {
 
+                      });
+                    });
                   },
                   child: Card(
                     color: bg,
