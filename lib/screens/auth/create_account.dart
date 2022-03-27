@@ -5,7 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 import '../../components/rounded_btn.dart';
 import '../../services/storage_methods.dart';
@@ -44,8 +43,7 @@ class _CreateAccountState extends State<CreateAccount> {
 
   @override
   Widget build(BuildContext context) {
-    return ModalProgressHUD(
-      inAsyncCall: showSpinner,
+    return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: true,
         appBar: AppBar(
@@ -223,50 +221,52 @@ class _CreateAccountState extends State<CreateAccount> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Center(
-                  child: RoundedButton(
-                    btnText: 'SIGN UP',
-                    color: Color(0xff14DAE2),
-                    onPressed: () async {
-                      setState(() {
-                        showSpinner = true;
-                      });
-                      try {
+                  child: showSpinner
+                      ? const CircularProgressIndicator(color: Colors.white)
+                      : RoundedButton(
+                          btnText: 'SIGN UP',
+                          color: Color(0xff14DAE2),
+                          onPressed: () async {
+                            setState(() {
+                              showSpinner = true;
+                            });
+                            try {
+                              UserCredential cred =
+                                  await _auth.createUserWithEmailAndPassword(
+                                email: email,
+                                password: password,
+                              );
 
-                        UserCredential cred =
-                            await _auth.createUserWithEmailAndPassword(
-                          email: email,
-                          password: password,
-                        );
+                              String photoUrl =
+                                  'https://i.stack.imgur.com/l60Hf.png';
 
-                        String photoUrl = 'https://i.stack.imgur.com/l60Hf.png';
+                              if (_image != null) {
+                                photoUrl = await StorageMethods()
+                                    .uploadUserProdile(_image!, cred.user!.uid);
+                              }
 
-                        if (_image != null) {
-                          photoUrl = await StorageMethods()
-                              .uploadUserProdile(_image!, cred.user!.uid);
-                        }
+                              await _firestore
+                                  .collection("users")
+                                  .doc(cred.user!.uid)
+                                  .set({
+                                "username": username,
+                                "uid": cred.user!.uid,
+                                "photoUrl": photoUrl,
+                              });
 
-                        await _firestore
-                            .collection("users")
-                            .doc(cred.user!.uid)
-                            .set({
-                          "username": username,
-                          "uid": cred.user!.uid,
-                          "photoUrl": photoUrl,
-                        });
-
-                        setState(() {
-                          showSpinner = false;
-                          username = '';
-                          email = '';
-                          password = '';
-                          _image = null;
-                        });
-                      } catch (e) {
-                        print(e);
-                      }
-                      // Add login code
-                    },
-                  ),
+                              setState(() {
+                                showSpinner = false;
+                                username = '';
+                                email = '';
+                                password = '';
+                                _image = null;
+                              });
+                            } catch (e) {
+                              print(e);
+                            }
+                            // Add login code
+                          },
+                        ),
                 ),
               ),
               const SizedBox(

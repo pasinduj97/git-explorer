@@ -82,7 +82,7 @@ class ForumMethods {
     try {
       DocumentSnapshot user = await _firestore
           .collection('users')
-          .doc(_auth.currentUser!.uid)
+            .doc(_auth.currentUser!.uid)
           .get();
 
       Map<String, dynamic> data = user.data() as Map<String, dynamic>;

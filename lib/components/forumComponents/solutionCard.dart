@@ -44,8 +44,9 @@ class _SolutionCardState extends State<SolutionCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      decoration: const BoxDecoration(
+          border: Border(bottom: BorderSide(color: Colors.grey))),
       padding: const EdgeInsets.only(bottom: 20),
-      color: const Color(0xff251F34),
       child: Row(
         children: [
           Column(
@@ -144,23 +145,13 @@ class _SolutionCardState extends State<SolutionCard> {
                     ),
                     widget.snap['uid'].toString() ==
                             FirebaseAuth.instance.currentUser!.uid
-                        ? Row(
-                            children: [
-                              IconButton(
-                                  onPressed: () {
-
-                                  },
-                                  icon: Icon(Icons.edit, color: Colors.grey)),
-                              IconButton(
-                                  onPressed: () async{
-                                    await ForumMethods().deleteSolution(
-                                        widget.snap['solutionId'].toString(),
-                                        widget.questionId
-                                    );
-                                  },
-                                  icon: Icon(Icons.delete, color: Colors.red)),
-                            ],
-                          )
+                        ? IconButton(
+                            onPressed: () async {
+                              await ForumMethods().deleteSolution(
+                                  widget.snap['solutionId'].toString(),
+                                  widget.questionId);
+                            },
+                            icon: const Icon(Icons.delete, color: Colors.red))
                         : Container(),
                   ],
                 ),
@@ -168,10 +159,9 @@ class _SolutionCardState extends State<SolutionCard> {
                   alignment: Alignment.centerLeft,
                   padding: const EdgeInsets.only(top: 10, right: 10),
                   child: Text(' ${widget.snap.data()['text']}',
-                      textAlign: TextAlign.left,
-                      style: const TextStyle(
-                        color: Colors.white,
-                      )),
+                      textAlign: TextAlign.start,
+                      style:
+                          const TextStyle(color: Colors.white, fontSize: 19)),
                 ),
               ],
             ),

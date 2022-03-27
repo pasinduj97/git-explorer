@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:git_explorer/screens/home.dart';
-import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 import '../../components/rounded_btn.dart';
 import 'create_account.dart';
@@ -22,8 +21,7 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    return ModalProgressHUD(
-      inAsyncCall: showSpinner,
+    return SafeArea(
       child: SafeArea(
         child: Scaffold(
           resizeToAvoidBottomInset: true,
@@ -175,7 +173,7 @@ class _LoginState extends State<Login> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Center(
-                    child: RoundedButton(
+                    child: !showSpinner ? RoundedButton(
                       btnText: 'LOGIN',
                       color: const Color(0xff14DAE2),
                       onPressed: () async {
@@ -202,7 +200,7 @@ class _LoginState extends State<Login> {
                           print(e);
                         }
                       },
-                    ),
+                    ) : const CircularProgressIndicator(color: Colors.white),
                   ),
                 ),
                 const Center(
