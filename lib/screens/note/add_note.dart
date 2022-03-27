@@ -112,7 +112,7 @@ class _AddNoteState extends State<AddNote> {
     CollectionReference ref = FirebaseFirestore.instance
         .collection('users')
         .doc(FirebaseAuth.instance.currentUser!.uid)
-        .collection('notes');;
+        .collection('notes');
 
     var data = {
       'title' : title,
