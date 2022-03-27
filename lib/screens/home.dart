@@ -6,6 +6,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:git_explorer/screens/forums/forum.dart';
 import 'package:git_explorer/screens/note/notes.dart';
 
+import 'categories/category.dart';
+
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
   @override
@@ -16,7 +18,8 @@ class _HomeState extends State<Home> {
 
   int _selectedIndex = 0;
   final List<Widget> _children = [
-    Forum(),
+    // Forum(),
+    Category(),
     Notes()
   ];
   void _onItemTapped(int index) {
