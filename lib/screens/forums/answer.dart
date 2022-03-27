@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:git_explorer/components/forumComponents/solutionCard.dart';
+import 'package:git_explorer/screens/forums/post_rating.dart';
 import 'package:git_explorer/services/forum_methods.dart';
 
 class Answer extends StatefulWidget {
@@ -16,8 +17,7 @@ class Answer extends StatefulWidget {
 }
 
 class _AnswerState extends State<Answer> {
-  final TextEditingController solutionController =
-      TextEditingController();
+  final TextEditingController solutionController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -30,20 +30,19 @@ class _AnswerState extends State<Answer> {
       body: Column(
         children: [
           Column(
-
             children: [
               widget.snap['image'] != ''
                   ? SizedBox(
-                height: MediaQuery.of(context).size.height * 0.35,
-                width: double.infinity,
-                child: Image.network(
-                  widget.snap['image'].toString(),
-                  fit: BoxFit.cover,
-                ),
-              )
+                      height: MediaQuery.of(context).size.height * 0.35,
+                      width: double.infinity,
+                      child: Image.network(
+                        widget.snap['image'].toString(),
+                        fit: BoxFit.cover,
+                      ),
+                    )
                   : const SizedBox(
-                height: 1,
-              ),
+                      height: 1,
+                    ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                 child: Container(
@@ -61,9 +60,9 @@ class _AnswerState extends State<Answer> {
                   ),
                 ),
               ),
+              const PostRating(),
             ],
           ),
-
           Expanded(
             child: StreamBuilder(
               stream: FirebaseFirestore.instance
@@ -98,10 +97,9 @@ class _AnswerState extends State<Answer> {
           padding: const EdgeInsets.only(left: 16, right: 8),
           child: Row(
             children: [
-               CircleAvatar(
-                backgroundImage: NetworkImage(
-                widget.snap['userProfilePic'].toString()
-                ),
+              CircleAvatar(
+                backgroundImage:
+                    NetworkImage(widget.snap['userProfilePic'].toString()),
                 radius: 18,
               ),
               Expanded(
@@ -111,15 +109,11 @@ class _AnswerState extends State<Answer> {
                     cursorColor: Colors.white,
                     controller: solutionController,
                     style: (const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w400
-                    )),
+                        color: Colors.white, fontWeight: FontWeight.w400)),
                     decoration: const InputDecoration(
-                      hintText: 'Add solution',
-                      border: InputBorder.none,
-                      hintStyle: TextStyle(color: Colors.grey)
-
-                    ),
+                        hintText: 'Add solution',
+                        border: InputBorder.none,
+                        hintStyle: TextStyle(color: Colors.grey)),
                   ),
                 ),
               ),
@@ -143,7 +137,9 @@ class _AnswerState extends State<Answer> {
                       const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
                   child: const Text(
                     'Post',
-                    style: TextStyle(color: Color(0xff14DAE2),),
+                    style: TextStyle(
+                      color: Color(0xff14DAE2),
+                    ),
                   ),
                 ),
               )
