@@ -13,10 +13,13 @@ class _AddNoteState extends State<AddNote> {
   String? title;
   String? des;
 
+  GlobalKey<FormState> key = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+          backgroundColor: const Color(0xff251F34),
           body: SingleChildScrollView(
             child: Container(
               padding: EdgeInsets.all(12.0),
@@ -35,7 +38,7 @@ class _AddNoteState extends State<AddNote> {
                           ),
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all(
-                            Colors.grey[700]
+                            Colors.cyan
                           ),
                           padding: MaterialStateProperty.all(EdgeInsets.symmetric(
                             horizontal: 25.0,
@@ -47,12 +50,11 @@ class _AddNoteState extends State<AddNote> {
                         onPressed: add,
                         child: Text('Save', style: TextStyle(
                           fontSize: 18.0,
-                          fontFamily: "lato",
                           color: Colors.white,
                         ),),
                         style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all(
-                                Colors.grey[700]
+                                Colors.cyan
                             ),
                             padding: MaterialStateProperty.all(EdgeInsets.symmetric(
                               horizontal: 25.0,
@@ -65,20 +67,27 @@ class _AddNoteState extends State<AddNote> {
                   SizedBox(
                     height: 12.0,
                   ),
-                  Form(child: Column(
+                  Form(key: key, child: Column(
                     children: [
                       TextFormField(
                         decoration: InputDecoration.collapsed(
-                            hintText: "Tittle",
+                          hintText: "Tittle",
+                          hintStyle: TextStyle(color: Colors.grey)
                         ),
                         style: TextStyle(
                           fontSize: 32.0,
-                          fontFamily: "lato",
                           fontWeight: FontWeight.bold,
-                          color: Colors.grey,
+                          color: Colors.white,
                         ),
                         onChanged: (_val){
                           title = _val;
+                        },
+                        validator: (_val){
+                          if(_val!.isEmpty){
+                            return "Input field cannot be empty!";
+                          }else{
+                            return null;
+                          }
                         },
                       ),
                       Container(
@@ -87,14 +96,21 @@ class _AddNoteState extends State<AddNote> {
                         child: TextFormField(
                           decoration: InputDecoration.collapsed(
                             hintText: "Note Description",
+                            hintStyle: TextStyle(color: Colors.grey)
                           ),
                           style: TextStyle(
                             fontSize: 20.0,
-                            fontFamily: "lato",
-                            color: Colors.grey,
+                            color: Colors.white,
                           ),
                           onChanged: (_val){
                             des = _val;
+                          },
+                          validator: (_val){
+                            if(_val!.isEmpty){
+                              return "Input field cannot be empty!";
+                            }else{
+                              return null;
+                            }
                           },
                           maxLines: 20,
                         ),
@@ -108,7 +124,7 @@ class _AddNoteState extends State<AddNote> {
       );
   }
 
-  void add(){
+  void add() async{
     CollectionReference ref = FirebaseFirestore.instance
         .collection('users')
         .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -120,10 +136,9 @@ class _AddNoteState extends State<AddNote> {
       'created': DateTime.now(),
     };
 
-    ref.add(data);
-
-    Navigator.pop(context);
-
-
+    if(key.currentState!.validate()){
+      await ref.add(data);
+      Navigator.pop(context);
+    }
   }
 }

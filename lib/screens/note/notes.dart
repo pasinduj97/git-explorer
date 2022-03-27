@@ -35,6 +35,7 @@ class _NotesState extends State<Notes> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xff251F34),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.of(context)
@@ -52,21 +53,14 @@ class _NotesState extends State<Notes> {
           Icons.add,
           color: Colors.white70,
         ),
-        backgroundColor: Colors.grey[700],
+        backgroundColor: const Color(0xff14DAE2),
       ),
       //
       appBar: AppBar(
         title: Text(
-          "Notes",
-          style: TextStyle(
-            fontSize: 32.0,
-            fontFamily: "lato",
-            fontWeight: FontWeight.bold,
-            color: Colors.white70,
-          ),
+          "Notes"
         ),
-        elevation: 0.0,
-        backgroundColor: Color(0xff070706),
+        backgroundColor: const Color(0xff251F34),
       ),
       //
       body: FutureBuilder<QuerySnapshot>(
@@ -76,7 +70,7 @@ class _NotesState extends State<Notes> {
             if (snapshot.data?.docs.length == 0) {
               return Center(
                 child: Text(
-                  "You have no saved Notes !",
+                  "No notes available",
                   style: TextStyle(
                     color: Colors.white70,
                   ),
@@ -96,7 +90,8 @@ class _NotesState extends State<Notes> {
 
                 return InkWell(
                   onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => ViewNotes(data, formattedTime, snapshot.data!.docs[index].reference),),)
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context) =>
+                        ViewNotes(data, formattedTime, snapshot.data!.docs[index].reference),),)
                     .then((value){
                       setState(() {
 
