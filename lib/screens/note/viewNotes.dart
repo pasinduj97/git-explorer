@@ -26,10 +26,11 @@ class _ViewNotesState extends State<ViewNotes> {
     des = widget.data['description'];
     return SafeArea(
         child: Scaffold(
+            backgroundColor: const Color(0xff251F34),
             floatingActionButton: FloatingActionButton(
               onPressed: update,
               child: Icon(Icons.save_rounded),
-              backgroundColor: Colors.grey[700],
+              backgroundColor: const Color(0xff14DAE2),
             ),
             body: SingleChildScrollView(
               child: Container(
@@ -49,7 +50,7 @@ class _ViewNotesState extends State<ViewNotes> {
                           ),
                           style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all(
-                                  Colors.grey[700]
+                                  Colors.cyan
                               ),
                               padding: MaterialStateProperty.all(EdgeInsets.symmetric(
                                   horizontal: 25.0,
@@ -65,7 +66,7 @@ class _ViewNotesState extends State<ViewNotes> {
                           ),
                           style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all(
-                                  Colors.grey[700]
+                                  Colors.cyan
                               ),
                               padding: MaterialStateProperty.all(EdgeInsets.symmetric(
                                   horizontal: 25.0,
@@ -83,12 +84,12 @@ class _ViewNotesState extends State<ViewNotes> {
                         TextFormField(
                           decoration: InputDecoration.collapsed(
                             hintText: "Tittle",
+                            hintStyle: TextStyle(color: Colors.grey)
                           ),
                           style: TextStyle(
                             fontSize: 32.0,
-                            fontFamily: "lato",
                             fontWeight: FontWeight.bold,
-                            color: Colors.grey,
+                            color: Colors.white,
                           ),
                           initialValue: widget.data['title'],
                           onChanged: (_val){
@@ -108,11 +109,11 @@ class _ViewNotesState extends State<ViewNotes> {
                           child: TextFormField(
                             decoration: InputDecoration.collapsed(
                               hintText: "Note Description",
+                              hintStyle: TextStyle(color: Colors.grey)
                             ),
                             style: TextStyle(
                               fontSize: 20.0,
-                              fontFamily: "lato",
-                              color: Colors.grey,
+                              color: Colors.white,
                             ),
                             initialValue: widget.data['description'],
                             onChanged: (_val){
