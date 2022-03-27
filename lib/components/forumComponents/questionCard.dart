@@ -104,10 +104,13 @@ class _QuestionCardState extends State<QuestionCard> {
                 widget.snap['image'] != ''
                     ? SizedBox(
                         height: MediaQuery.of(context).size.height * 0.35,
-                        width: double.infinity,
-                        child: Image.network(
-                          widget.snap['image'].toString(),
-                          fit: BoxFit.cover,
+                        width: MediaQuery.of(context).size.width*0.95,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10.0),
+                          child: Image.network(
+                            widget.snap['image'].toString(),
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       )
                     : const SizedBox(

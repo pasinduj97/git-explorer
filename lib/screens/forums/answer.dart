@@ -45,7 +45,7 @@ class _AnswerState extends State<Answer> {
                 height: 1,
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                padding: const EdgeInsets.fromLTRB(10, 0, 10, 30),
                 child: Container(
                   width: double.infinity,
                   padding: const EdgeInsets.only(
@@ -83,6 +83,7 @@ class _AnswerState extends State<Answer> {
                   itemCount: snapshot.data!.docs.length,
                   itemBuilder: (ctx, index) => SolutionCard(
                     snap: snapshot.data!.docs[index],
+                    questionId: widget.questionId,
                   ),
                 );
               },
