@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:git_explorer/screens/note/add_note.dart';
 
 class GitIntro extends StatefulWidget {
-  const GitIntro({Key? key}) : super(key: key);
+  final String heading;
+  final String description;
+
+  const GitIntro({Key? key, required this.heading, required this.description}) : super(key: key);
 
   @override
   State<GitIntro> createState() => _GitIntroState();
@@ -84,9 +87,9 @@ class _GitIntroState extends State<GitIntro> {
                 ),
                 Container(child: Column(
                   children: [
-                    const Text(
-                      "Heading",
-                      style: TextStyle(
+                     Text(
+                      widget.heading,
+                      style: const TextStyle(
                         fontSize: 32.0,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
@@ -95,9 +98,9 @@ class _GitIntroState extends State<GitIntro> {
                     Container(
                       height: MediaQuery.of(context).size.height * 0.75,
                       padding: const EdgeInsets.only(top: 12.0),
-                      child: const Text(
-                        "Description",
-                        style: TextStyle(
+                      child: Text(
+                        widget.description,
+                        style: const TextStyle(
                           fontSize: 20.0,
                           color: Colors.white,
                         ),

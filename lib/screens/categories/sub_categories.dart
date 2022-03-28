@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:git_explorer/screens/note/gitIntro.dart';
 
 class SubCategory extends StatefulWidget {
   final String subCategoryId;
@@ -52,7 +53,15 @@ class _SubCategoryState extends State<SubCategory> {
                       return Container(
                           margin: EdgeInsets.all(5.0),
                           child: GestureDetector(
-                              onTap: () {},
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => GitIntro(heading:
+                                        snapshot.data!.docs[index].get('name'),
+                                            description:
+                                            snapshot.data!.docs[index].get('description'))));
+                              },
                               child: Container(
                                   margin: EdgeInsets.all(2.0),
                                   padding: EdgeInsets.all(20.0),
