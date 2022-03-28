@@ -31,36 +31,28 @@ class _AddNoteState extends State<AddNote> {
               padding: EdgeInsets.all(12.0),
               child: Column(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      ElevatedButton(
-                        onPressed: add,
-                        child: Text('Save', style: TextStyle(
-                          fontSize: 18.0,
-                          color: Colors.white,
-                        ),),
-                        style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(
-                                Colors.cyan
-                            ),
-                            padding: MaterialStateProperty.all(EdgeInsets.symmetric(
-                              horizontal: 25.0,
-                              vertical: 8.0
-                            ))
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 12.0,
-                  ),
                   Form(key: key, child: Column(
                     children: [
+                      const Align(
+                        child: Text(
+                          "Enter your title: ",
+                          style: TextStyle(fontSize: 18, color: Colors.cyan),
+                        ),
+                        alignment: Alignment.centerLeft,
+                      ),
+                      const SizedBox(
+                        height: 12.0,
+                      ),
                       TextFormField(
-                        decoration: const InputDecoration.collapsed(
-                          hintText: "Tittle",
-                          hintStyle: TextStyle(color: Colors.grey)
+                        maxLines: 1,
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                          fillColor: Color(0xfff3B324E),
+                          filled: true,
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Color(0xff14DAE2), width: 2.0),
+                            borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                          ),
                         ),
                         style: const TextStyle(
                           fontSize: 32.0,
@@ -78,13 +70,29 @@ class _AddNoteState extends State<AddNote> {
                           }
                         },
                       ),
-                      Container(
-                        height: MediaQuery.of(context).size.height * 0.75,
-                        padding: const EdgeInsets.only(top: 12.0),
-                        child: TextFormField(
-                          decoration: const InputDecoration.collapsed(
-                            hintText: "Note Description",
-                            hintStyle: TextStyle(color: Colors.grey)
+                      const SizedBox(
+                        height: 15.0,
+                      ),
+                      const Align(
+                        child: Text(
+                          "Enter your description: ",
+                          style: TextStyle(fontSize: 18, color: Colors.cyan),
+                        ),
+                        alignment: Alignment.centerLeft,
+                      ),
+                      const SizedBox(
+                        height: 12.0,
+                      ),
+                      TextFormField(
+                         maxLines: 8,
+                         decoration: const InputDecoration(
+                           border: InputBorder.none,
+                           fillColor: Color(0xfff3B324E),
+                           filled: true,
+                           focusedBorder: OutlineInputBorder(
+                             borderSide: BorderSide(color: Color(0xff14DAE2), width: 2.0),
+                             borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                           ),
                           ),
                           style: const TextStyle(
                             fontSize: 20.0,
@@ -100,7 +108,23 @@ class _AddNoteState extends State<AddNote> {
                               return null;
                             }
                           },
-                          maxLines: 200,
+                        ),
+                      const SizedBox(
+                        height: 12.0,
+                      ),
+                      ElevatedButton(
+                        onPressed: add,
+                        child: const Text('Save', style: TextStyle(
+                          fontSize: 18.0,
+                          color: Colors.white,
+                        ),),
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.cyan,
+                          onPrimary: Colors.white,
+                          elevation: 3,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0)),
+                          minimumSize: const Size(400, 40),
                         ),
                       ),
                     ],

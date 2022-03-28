@@ -22,13 +22,12 @@ class _NotesState extends State<Notes> {
       .collection('notes');
 
   List<Color> myColors = [
-    Colors.yellow,
-    Colors.deepPurple,
-    Colors.red,
-    Colors.pink,
-    Colors.purple,
-    Colors.cyan,
-    Colors.teal,
+    Colors.amber.shade300,
+    Colors.tealAccent.shade100,
+    Colors.lightBlue.shade300,
+    Colors.orange.shade300,
+    Colors.pinkAccent.shade100,
+    Colors.lightGreen.shade300,
   ];
 
   @override
@@ -67,7 +66,7 @@ class _NotesState extends State<Notes> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data?.docs.length == 0) {
-              return Center(
+              return const Center(
                 child: Text(
                   "No notes available",
                   style: TextStyle(
@@ -99,16 +98,15 @@ class _NotesState extends State<Notes> {
                   },
                   child: Card(
                     color: bg,
-                    child: Padding(
-                      padding: const EdgeInsets.all(15.0),
+                    child: Container(
+                      padding: EdgeInsets.all(8),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             "${data['title']}",
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 24.0,
-                              fontFamily: "lato",
                               fontWeight: FontWeight.bold,
                               color: Colors.black87,
                             ),
@@ -118,9 +116,8 @@ class _NotesState extends State<Notes> {
                             alignment: Alignment.centerRight,
                             child: Text(
                               formattedTime,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 20.0,
-                                fontFamily: "lato",
                                 color: Colors.black87,
                               ),
                             ),
@@ -132,7 +129,8 @@ class _NotesState extends State<Notes> {
                 );
               },
             );
-          } else {
+          }
+          else {
             return Center(
               child: Text("Loading..."),
             );
