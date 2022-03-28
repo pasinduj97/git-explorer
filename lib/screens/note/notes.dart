@@ -39,7 +39,7 @@ class _NotesState extends State<Notes> {
           Navigator.of(context)
               .push(
             MaterialPageRoute(
-              builder: (context) => GitIntro(),
+              builder: (context) => AddNote(),
             ),
           )
               .then((value) {
