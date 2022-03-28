@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:git_explorer/screens/note/add_note.dart';
 import 'package:git_explorer/screens/note/viewNotes.dart';
+import 'package:git_explorer/screens/note/gitIntro.dart';
 
 class Notes extends StatefulWidget {
   const Notes({Key? key}) : super(key: key);
@@ -22,14 +23,12 @@ class _NotesState extends State<Notes> {
 
   List<Color> myColors = [
     Colors.yellow,
-    Colors.red,
-    Colors.green,
     Colors.deepPurple,
+    Colors.red,
+    Colors.pink,
     Colors.purple,
     Colors.cyan,
     Colors.teal,
-    Colors.tealAccent,
-    Colors.pink,
   ];
 
   @override
@@ -41,7 +40,7 @@ class _NotesState extends State<Notes> {
           Navigator.of(context)
               .push(
             MaterialPageRoute(
-              builder: (context) => AddNote(),
+              builder: (context) => GitIntro(),
             ),
           )
               .then((value) {
@@ -84,9 +83,9 @@ class _NotesState extends State<Notes> {
                 Random random = new Random();
                 Color bg = myColors[random.nextInt(4)];
                 Map? data = snapshot.data?.docs[index].data() as Map?;
-                DateTime mydateTime = data!['created']?.toDate();
+                DateTime myDateTime = data!['created']?.toDate();
                 String formattedTime =
-                DateFormat.yMMMd().add_jm().format(mydateTime);
+                DateFormat.yMMMd().add_jm().format(myDateTime);
 
                 return InkWell(
                   onTap: () {

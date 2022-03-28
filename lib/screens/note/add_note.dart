@@ -19,6 +19,12 @@ class _AddNoteState extends State<AddNote> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+          appBar: AppBar(
+            title: const Text(
+                "Add Note"
+            ),
+            backgroundColor: const Color(0xff251F34),
+          ),
           backgroundColor: const Color(0xff251F34),
           body: SingleChildScrollView(
             child: Container(
@@ -28,24 +34,6 @@ class _AddNoteState extends State<AddNote> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      ElevatedButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: Icon(
-                            Icons.arrow_back_ios_outlined,
-                            size: 24.0,
-                          ),
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(
-                            Colors.cyan
-                          ),
-                          padding: MaterialStateProperty.all(EdgeInsets.symmetric(
-                            horizontal: 25.0,
-                            vertical: 8.0
-                          ))
-                        ),
-                      ),
                       ElevatedButton(
                         onPressed: add,
                         child: Text('Save', style: TextStyle(
@@ -64,17 +52,17 @@ class _AddNoteState extends State<AddNote> {
                       ),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 12.0,
                   ),
                   Form(key: key, child: Column(
                     children: [
                       TextFormField(
-                        decoration: InputDecoration.collapsed(
+                        decoration: const InputDecoration.collapsed(
                           hintText: "Tittle",
                           hintStyle: TextStyle(color: Colors.grey)
                         ),
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 32.0,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
@@ -94,11 +82,11 @@ class _AddNoteState extends State<AddNote> {
                         height: MediaQuery.of(context).size.height * 0.75,
                         padding: const EdgeInsets.only(top: 12.0),
                         child: TextFormField(
-                          decoration: InputDecoration.collapsed(
+                          decoration: const InputDecoration.collapsed(
                             hintText: "Note Description",
                             hintStyle: TextStyle(color: Colors.grey)
                           ),
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 20.0,
                             color: Colors.white,
                           ),

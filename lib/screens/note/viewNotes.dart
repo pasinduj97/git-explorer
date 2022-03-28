@@ -26,6 +26,12 @@ class _ViewNotesState extends State<ViewNotes> {
     des = widget.data['description'];
     return SafeArea(
         child: Scaffold(
+            appBar: AppBar(
+              title: const Text(
+                  "Update Note"
+              ),
+              backgroundColor: const Color(0xff251F34),
+            ),
             backgroundColor: const Color(0xff251F34),
             floatingActionButton: FloatingActionButton(
               onPressed: update,
@@ -40,24 +46,6 @@ class _ViewNotesState extends State<ViewNotes> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: Icon(
-                            Icons.arrow_back_ios_outlined,
-                            size: 24.0,
-                          ),
-                          style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all(
-                                  Colors.cyan
-                              ),
-                              padding: MaterialStateProperty.all(EdgeInsets.symmetric(
-                                  horizontal: 25.0,
-                                  vertical: 8.0
-                              ))
-                          ),
-                        ),
                         ElevatedButton(
                           onPressed: delete,
                           child: Icon(
