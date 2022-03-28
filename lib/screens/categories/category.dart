@@ -54,15 +54,18 @@ class _CategoryState extends State<Category> {
                               builder: (context) => Certificate()));
                     } else if (snapshot.data!.docs[index].get('name') ==
                         'Forum') {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => Forum()));
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => Forum()));
                     } else {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => SubCategory()));
+                              builder: (context) => SubCategory(
+                                  subCategoryId:
+                                      snapshot.data!.docs[index].reference.id,
+                                  subCategoryName:
+                                  snapshot.data!.docs[index].get('name')
+                              )));
                     }
                   },
                   child: Container(
