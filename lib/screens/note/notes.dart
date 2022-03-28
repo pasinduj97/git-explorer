@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:git_explorer/screens/note/add_note.dart';
 import 'package:git_explorer/screens/note/viewNotes.dart';
+import 'package:git_explorer/screens/note/gitIntro.dart';
 
 class Notes extends StatefulWidget {
   const Notes({Key? key}) : super(key: key);
@@ -21,15 +22,12 @@ class _NotesState extends State<Notes> {
       .collection('notes');
 
   List<Color> myColors = [
-    Colors.yellow,
-    Colors.red,
-    Colors.green,
-    Colors.deepPurple,
-    Colors.purple,
-    Colors.cyan,
-    Colors.teal,
-    Colors.tealAccent,
-    Colors.pink,
+    Colors.amber.shade300,
+    Colors.tealAccent.shade100,
+    Colors.lightBlue.shade300,
+    Colors.orange.shade300,
+    Colors.pinkAccent.shade100,
+    Colors.lightGreen.shade300,
   ];
 
   @override
@@ -41,7 +39,7 @@ class _NotesState extends State<Notes> {
           Navigator.of(context)
               .push(
             MaterialPageRoute(
-              builder: (context) => AddNote(),
+              builder: (context) => GitIntro(),
             ),
           )
               .then((value) {
@@ -68,7 +66,7 @@ class _NotesState extends State<Notes> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data?.docs.length == 0) {
-              return Center(
+              return const Center(
                 child: Text(
                   "No notes available",
                   style: TextStyle(
@@ -84,9 +82,9 @@ class _NotesState extends State<Notes> {
                 Random random = new Random();
                 Color bg = myColors[random.nextInt(4)];
                 Map? data = snapshot.data?.docs[index].data() as Map?;
-                DateTime mydateTime = data!['created']?.toDate();
+                DateTime myDateTime = data!['created']?.toDate();
                 String formattedTime =
-                DateFormat.yMMMd().add_jm().format(mydateTime);
+                DateFormat.yMMMd().add_jm().format(myDateTime);
 
                 return InkWell(
                   onTap: () {
@@ -100,16 +98,15 @@ class _NotesState extends State<Notes> {
                   },
                   child: Card(
                     color: bg,
-                    child: Padding(
-                      padding: const EdgeInsets.all(15.0),
+                    child: Container(
+                      padding: EdgeInsets.all(8),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             "${data['title']}",
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 24.0,
-                              fontFamily: "lato",
                               fontWeight: FontWeight.bold,
                               color: Colors.black87,
                             ),
@@ -119,9 +116,8 @@ class _NotesState extends State<Notes> {
                             alignment: Alignment.centerRight,
                             child: Text(
                               formattedTime,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 20.0,
-                                fontFamily: "lato",
                                 color: Colors.black87,
                               ),
                             ),
@@ -133,7 +129,8 @@ class _NotesState extends State<Notes> {
                 );
               },
             );
-          } else {
+          }
+          else {
             return Center(
               child: Text("Loading..."),
             );

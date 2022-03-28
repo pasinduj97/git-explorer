@@ -19,62 +19,42 @@ class _AddNoteState extends State<AddNote> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+          appBar: AppBar(
+            title: const Text(
+                "Add Note"
+            ),
+            backgroundColor: const Color(0xff251F34),
+          ),
           backgroundColor: const Color(0xff251F34),
           body: SingleChildScrollView(
             child: Container(
               padding: EdgeInsets.all(12.0),
               child: Column(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      ElevatedButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: Icon(
-                            Icons.arrow_back_ios_outlined,
-                            size: 24.0,
-                          ),
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(
-                            Colors.cyan
-                          ),
-                          padding: MaterialStateProperty.all(EdgeInsets.symmetric(
-                            horizontal: 25.0,
-                            vertical: 8.0
-                          ))
-                        ),
-                      ),
-                      ElevatedButton(
-                        onPressed: add,
-                        child: Text('Save', style: TextStyle(
-                          fontSize: 18.0,
-                          color: Colors.white,
-                        ),),
-                        style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(
-                                Colors.cyan
-                            ),
-                            padding: MaterialStateProperty.all(EdgeInsets.symmetric(
-                              horizontal: 25.0,
-                              vertical: 8.0
-                            ))
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 12.0,
-                  ),
                   Form(key: key, child: Column(
                     children: [
-                      TextFormField(
-                        decoration: InputDecoration.collapsed(
-                          hintText: "Tittle",
-                          hintStyle: TextStyle(color: Colors.grey)
+                      const Align(
+                        child: Text(
+                          "Enter your title: ",
+                          style: TextStyle(fontSize: 18, color: Colors.cyan),
                         ),
-                        style: TextStyle(
+                        alignment: Alignment.centerLeft,
+                      ),
+                      const SizedBox(
+                        height: 12.0,
+                      ),
+                      TextFormField(
+                        maxLines: 1,
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                          fillColor: Color(0xfff3B324E),
+                          filled: true,
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Color(0xff14DAE2), width: 2.0),
+                            borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                          ),
+                        ),
+                        style: const TextStyle(
                           fontSize: 32.0,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
@@ -90,15 +70,31 @@ class _AddNoteState extends State<AddNote> {
                           }
                         },
                       ),
-                      Container(
-                        height: MediaQuery.of(context).size.height * 0.75,
-                        padding: const EdgeInsets.only(top: 12.0),
-                        child: TextFormField(
-                          decoration: InputDecoration.collapsed(
-                            hintText: "Note Description",
-                            hintStyle: TextStyle(color: Colors.grey)
+                      const SizedBox(
+                        height: 15.0,
+                      ),
+                      const Align(
+                        child: Text(
+                          "Enter your description: ",
+                          style: TextStyle(fontSize: 18, color: Colors.cyan),
+                        ),
+                        alignment: Alignment.centerLeft,
+                      ),
+                      const SizedBox(
+                        height: 12.0,
+                      ),
+                      TextFormField(
+                         maxLines: 8,
+                         decoration: const InputDecoration(
+                           border: InputBorder.none,
+                           fillColor: Color(0xfff3B324E),
+                           filled: true,
+                           focusedBorder: OutlineInputBorder(
+                             borderSide: BorderSide(color: Color(0xff14DAE2), width: 2.0),
+                             borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                           ),
                           ),
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 20.0,
                             color: Colors.white,
                           ),
@@ -112,7 +108,23 @@ class _AddNoteState extends State<AddNote> {
                               return null;
                             }
                           },
-                          maxLines: 20,
+                        ),
+                      const SizedBox(
+                        height: 12.0,
+                      ),
+                      ElevatedButton(
+                        onPressed: add,
+                        child: const Text('Save', style: TextStyle(
+                          fontSize: 18.0,
+                          color: Colors.white,
+                        ),),
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.cyan,
+                          onPrimary: Colors.white,
+                          elevation: 3,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0)),
+                          minimumSize: const Size(400, 40),
                         ),
                       ),
                     ],
