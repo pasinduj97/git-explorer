@@ -83,17 +83,38 @@ class _QuestionCardState extends State<QuestionCard> {
                                 color: Colors.grey,
                               )),
                           IconButton(
-                              onPressed: () async {
-                                await ForumMethods().deleteQuestion(
-                                    widget.snap['questionId'].toString());
-                              },
+                              onPressed: () => showDialog<String>(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        AlertDialog(
+                                      title: const Text('Delete Question'),
+                                      content: const Text(
+                                          'Question will be permanently deleted'),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () =>
+                                              Navigator.pop(context, 'Cancel'),
+                                          child: const Text('Cancel'),
+                                        ),
+                                        TextButton(
+                                          onPressed: () async {
+                                            Navigator.pop(context, 'Cancel');
+                                            await ForumMethods().deleteQuestion(
+                                                widget.snap['questionId']
+                                                    .toString());
+                                          },
+                                          child: const Text('OK'),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                               icon: const Icon(
                                 Icons.delete,
                                 color: Colors.redAccent,
                               )),
                         ],
                       )
-                    : SizedBox(height: 50),
+                    : const SizedBox(height: 50),
               ],
             ),
           ),
@@ -104,7 +125,7 @@ class _QuestionCardState extends State<QuestionCard> {
                 widget.snap['image'] != ''
                     ? SizedBox(
                         height: MediaQuery.of(context).size.height * 0.35,
-                        width: MediaQuery.of(context).size.width*0.95,
+                        width: MediaQuery.of(context).size.width * 0.95,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(10.0),
                           child: Image.network(
@@ -140,17 +161,9 @@ class _QuestionCardState extends State<QuestionCard> {
                     padding: const EdgeInsets.only(
                       top: 8,
                     ),
-                    child: RichText(
-                      text: TextSpan(
+                    child: Text(widget.snap['question'].toString(),
                         style:
-                            const TextStyle(color: Colors.black, fontSize: 20),
-                        children: [
-                          TextSpan(
-                              text: widget.snap['question'].toString(),
-                              style: TextStyle(color: Colors.white)),
-                        ],
-                      ),
-                    ),
+                            const TextStyle(color: Colors.white, fontSize: 20)),
                   ),
                   Container(
                     child: Text(

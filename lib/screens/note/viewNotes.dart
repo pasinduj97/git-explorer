@@ -107,7 +107,7 @@ class _ViewNotesState extends State<ViewNotes> {
                             onChanged: (_val){
                               des = _val;
                             },
-                            maxLines: 20,
+                            maxLines: 200,
                             validator: (_val){
                               if(_val!.isEmpty){
                                 return "Input field cannot be empty!";

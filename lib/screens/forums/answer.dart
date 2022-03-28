@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:git_explorer/components/forumComponents/solutionCard.dart';
 import 'package:git_explorer/services/forum_methods.dart';
@@ -16,9 +17,24 @@ class Answer extends StatefulWidget {
 }
 
 class _AnswerState extends State<Answer> {
-  final TextEditingController solutionController =
-      TextEditingController();
-
+  final TextEditingController solutionController = TextEditingController();
+  String userProPic = "https://i.stack.imgur.com/l60Hf.png";
+  
+  @override
+  void initState() {
+    getUser();
+  }
+  
+  getUser() async{
+    String user = FirebaseAuth.instance.currentUser!.uid;
+    DocumentSnapshot doc = await FirebaseFirestore.instance.collection("users").doc(user).get();
+    
+    setState(() {
+      userProPic = doc.get("photoUrl").toString();
+    });
+    
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,20 +46,19 @@ class _AnswerState extends State<Answer> {
       body: Column(
         children: [
           Column(
-
             children: [
               widget.snap['image'] != ''
                   ? SizedBox(
-                height: MediaQuery.of(context).size.height * 0.35,
-                width: double.infinity,
-                child: Image.network(
-                  widget.snap['image'].toString(),
-                  fit: BoxFit.cover,
-                ),
-              )
+                      height: MediaQuery.of(context).size.height * 0.35,
+                      width: double.infinity,
+                      child: Image.network(
+                        widget.snap['image'].toString(),
+                        fit: BoxFit.cover,
+                      ),
+                    )
                   : const SizedBox(
-                height: 1,
-              ),
+                      height: 1,
+                    ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(10, 0, 10, 30),
                 child: Container(
@@ -63,7 +78,6 @@ class _AnswerState extends State<Answer> {
               ),
             ],
           ),
-
           Expanded(
             child: StreamBuilder(
               stream: FirebaseFirestore.instance
@@ -78,14 +92,17 @@ class _AnswerState extends State<Answer> {
                     child: CircularProgressIndicator(),
                   );
                 }
-
-                return ListView.builder(
-                  itemCount: snapshot.data!.docs.length,
-                  itemBuilder: (ctx, index) => SolutionCard(
-                    snap: snapshot.data!.docs[index],
-                    questionId: widget.questionId,
-                  ),
-                );
+                if (snapshot != null) {
+                  return ListView.builder(
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: (ctx, index) => SolutionCard(
+                      snap: snapshot.data!.docs[index],
+                      questionId: widget.questionId,
+                    ),
+                  );
+                } else {
+                  return const Text('');
+                }
               },
             ),
           )
@@ -99,10 +116,9 @@ class _AnswerState extends State<Answer> {
           padding: const EdgeInsets.only(left: 16, right: 8),
           child: Row(
             children: [
-               CircleAvatar(
-                backgroundImage: NetworkImage(
-                widget.snap['userProfilePic'].toString()
-                ),
+              CircleAvatar(
+                backgroundImage:
+                    NetworkImage(userProPic),
                 radius: 18,
               ),
               Expanded(
@@ -112,18 +128,15 @@ class _AnswerState extends State<Answer> {
                     cursorColor: Colors.white,
                     controller: solutionController,
                     style: (const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w400
-                    )),
+                        color: Colors.white, fontWeight: FontWeight.w400)),
                     decoration: const InputDecoration(
-                      hintText: 'Add solution',
-                      border: InputBorder.none,
-                      hintStyle: TextStyle(color: Colors.grey)
-
-                    ),
+                        hintText: 'Add solution',
+                        border: InputBorder.none,
+                        hintStyle: TextStyle(color: Colors.grey)),
                   ),
                 ),
               ),
+
               InkWell(
                 onTap: () async {
                   try {
@@ -144,7 +157,9 @@ class _AnswerState extends State<Answer> {
                       const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
                   child: const Text(
                     'Post',
-                    style: TextStyle(color: Color(0xff14DAE2),),
+                    style: TextStyle(
+                      color: Color(0xff14DAE2),
+                    ),
                   ),
                 ),
               )

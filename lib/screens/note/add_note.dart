@@ -100,7 +100,7 @@ class _AddNoteState extends State<AddNote> {
                               return null;
                             }
                           },
-                          maxLines: 20,
+                          maxLines: 200,
                         ),
                       ),
                     ],
