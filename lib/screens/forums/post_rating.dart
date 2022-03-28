@@ -2,14 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class PostRating extends StatefulWidget {
-  const PostRating({Key? key}) : super(key: key);
+  final snap;
+  const PostRating({
+    Key? key,
+    required this.snap,
+  }) : super(key: key);
 
   @override
   State<PostRating> createState() => _PostRatingState();
 }
 
 class _PostRatingState extends State<PostRating> {
-  double rating = 3.0;
+  double rating = 3.3;
 
   onRatingUpdate(rating) {
     // ignore: avoid_print
@@ -61,6 +65,21 @@ class _PostRatingState extends State<PostRating> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.snap.length);
+    final numberOfRating = widget.snap.length;
+    if (numberOfRating > 0) {
+      double sumOfAllRating = 0.0;
+      for (var rateRowItem in widget.snap.length) {
+        if (rateRowItem.rating) {
+          sumOfAllRating += rateRowItem.rating;
+        }
+      }
+
+      setState(() {
+        rating = sumOfAllRating / numberOfRating;
+      });
+    }
+
     return Container(
         width: double.infinity,
         padding: const EdgeInsets.only(

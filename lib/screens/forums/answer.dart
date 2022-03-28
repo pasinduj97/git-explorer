@@ -60,7 +60,25 @@ class _AnswerState extends State<Answer> {
                   ),
                 ),
               ),
-              const PostRating(),
+              StreamBuilder(
+                stream:
+                    FirebaseFirestore.instance.collection('rating').snapshots(),
+                builder: (context,
+                    AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                        snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+
+                  if (snapshot != null) {
+                    return PostRating(snap: snapshot.data!.docs);
+                  } else {
+                    return const Text('No Rating...');
+                  }
+                },
+              ),
             ],
           ),
           Expanded(
