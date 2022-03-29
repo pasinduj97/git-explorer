@@ -51,7 +51,6 @@ class _GitIntroState extends State<GitIntro> {
                             ),
                           )
                               .then((value) {
-                            print("Calling Set  State !");
                             setState(() {});
                           });
                           // Navigator.of(context).pop();
@@ -77,7 +76,6 @@ class _GitIntroState extends State<GitIntro> {
                             ),
                           )
                               .then((value) {
-                            print("Calling Set  State !");
                             setState(() {});
                           });
                         },
@@ -140,7 +138,6 @@ class _GitIntroState extends State<GitIntro> {
                             child: CircularProgressIndicator(),
                           );
                         }
-                        print(snapshot.data!.docs);
                         if (snapshot != null) {
                           return LessonRating(snap: snapshot.data!.docs);
                         } else {

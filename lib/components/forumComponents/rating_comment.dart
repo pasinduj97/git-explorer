@@ -17,7 +17,6 @@ class RatingComment extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(ratingDoc);
     return Container(
       padding: const EdgeInsets.all(10),
       child: Column(

@@ -17,8 +17,6 @@ class _LessonRatingState extends State<LessonRating> {
   double rating = 3.3;
 
   onRatingUpdate(rating) {
-    // ignore: avoid_print
-    print(rating);
     setState(() {
       this.rating = rating;
     });
@@ -67,8 +65,6 @@ class _LessonRatingState extends State<LessonRating> {
 
   @override
   Widget build(BuildContext context) {
-    print('widget.snap.length');
-    print(widget.snap.length);
     final numberOfRating = widget.snap.length;
     if (numberOfRating > 0) {
       double sumOfAllRating = 0.0;
