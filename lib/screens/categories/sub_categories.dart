@@ -48,7 +48,6 @@ class _SubCategoryState extends State<SubCategory> {
                           snapshot.data!.docs[index].get('name') == 'Forum') {
                         return Container();
                       }
-                      ;
 
                       return Container(
                           margin: EdgeInsets.all(5.0),
@@ -57,20 +56,26 @@ class _SubCategoryState extends State<SubCategory> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => GitIntro(heading:
-                                        snapshot.data!.docs[index].get('name'),
-                                            description:
-                                            snapshot.data!.docs[index].get('description'))));
+                                      builder: (context) => GitIntro(
+                                          heading: snapshot.data!.docs[index]
+                                              .get('name'),
+                                          description: snapshot
+                                              .data!.docs[index]
+                                              .get('description'),
+                                          subCategoryId: widget.subCategoryId,
+                                          lessonId: snapshot
+                                              .data!.docs[index].reference.id),
+                                    ));
                               },
                               child: Container(
-                                  margin: EdgeInsets.all(2.0),
-                                  padding: EdgeInsets.all(20.0),
+                                  margin: const EdgeInsets.all(2.0),
+                                  padding: const EdgeInsets.all(20.0),
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(8),
                                       color: Colors.white70),
                                   child: Text(
                                       snapshot.data!.docs[index].get('name'),
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           color: Colors.black,
                                           fontWeight: FontWeight.bold,
                                           fontSize: 15)))));
