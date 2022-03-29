@@ -1,93 +1,106 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:git_explorer/components/forumComponents/rating_comment.dart';
 import 'package:git_explorer/screens/note/add_note.dart';
+import 'package:git_explorer/screens/rating/lesson_rating.dart';
 
 class GitIntro extends StatefulWidget {
   final String heading;
   final String description;
+  final String subCategoryId;
+  final String lessonId;
 
-  const GitIntro({Key? key, required this.heading, required this.description}) : super(key: key);
+  const GitIntro(
+      {Key? key,
+      required this.heading,
+      required this.description,
+      required this.lessonId,
+      required this.subCategoryId})
+      : super(key: key);
 
   @override
   State<GitIntro> createState() => _GitIntroState();
 }
 
 class _GitIntroState extends State<GitIntro> {
-  CollectionReference ref = FirebaseFirestore.instance
-      .collection('categories');
+  CollectionReference ref = FirebaseFirestore.instance.collection('categories');
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xff251F34),
-      appBar: AppBar(
-        title: const Text(
-            "Git Intro"
-        ),
         backgroundColor: const Color(0xff251F34),
-      ),
-      body: SingleChildScrollView(
-        child: Container(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
+        appBar: AppBar(
+          title: const Text("Git Intro"),
+          backgroundColor: const Color(0xff251F34),
+        ),
+        body: SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.all(12.0),
+            child: Column(
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context)
-                        .push(
-                          MaterialPageRoute(
-                            builder: (context) => AddNote(),
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context)
+                              .push(
+                            MaterialPageRoute(
+                              builder: (context) => AddNote(),
+                            ),
+                          )
+                              .then((value) {
+                            print("Calling Set  State !");
+                            setState(() {});
+                          });
+                          // Navigator.of(context).pop();
+                        },
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.cyan),
+                        ),
+                        child: const Text(
+                          'QA',
+                          style: TextStyle(
+                            fontSize: 18.0,
+                            color: Colors.white,
                           ),
-                        ).then((value) {
-                          print("Calling Set  State !");
-                          setState(() {});
-                        });
-                        // Navigator.of(context).pop();
-                      },
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(
-                            Colors.cyan
                         ),
                       ),
-                      child: const Text('QA', style: TextStyle(
-                        fontSize: 18.0,
-                        color: Colors.white,
-                      ),),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context)
-                            .push(
-                          MaterialPageRoute(
-                            builder: (context) => AddNote(),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context)
+                              .push(
+                            MaterialPageRoute(
+                              builder: (context) => AddNote(),
+                            ),
+                          )
+                              .then((value) {
+                            print("Calling Set  State !");
+                            setState(() {});
+                          });
+                        },
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.cyan),
+                        ),
+                        child: const Text(
+                          'Make Note',
+                          style: TextStyle(
+                            fontSize: 18.0,
+                            color: Colors.white,
                           ),
-                        ).then((value) {
-                          print("Calling Set  State !");
-                          setState(() {});
-                        });
-                      },
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(
-                            Colors.cyan
                         ),
                       ),
-                      child: const Text('Make Note', style: TextStyle(
-                        fontSize: 18.0,
-                        color: Colors.white,
-                      ),),
-                    ),
-                  ]
-                ),
+                    ]),
                 SizedBox(
                   height: 16.0,
                 ),
-                Container(child: Column(
+                Container(
+                    child: Column(
                   children: [
-                     Text(
+                    Text(
                       widget.heading,
                       style: const TextStyle(
                         fontSize: 32.0,
@@ -104,15 +117,42 @@ class _GitIntroState extends State<GitIntro> {
                           fontSize: 20.0,
                           color: Colors.white,
                         ),
-
                       ),
                     ),
+                    const Divider(
+                      thickness: 1,
+                      height: 30,
+                    ),
+                    StreamBuilder(
+                      stream: FirebaseFirestore.instance
+                          .collection('categories')
+                          .doc((widget.subCategoryId).toString())
+                          .collection((widget.subCategoryId).toString())
+                          .doc((widget.lessonId).toString())
+                          .collection('ratings')
+                          .snapshots(),
+                      builder: (context,
+                          AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                              snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                        print(snapshot.data!.docs);
+                        if (snapshot != null) {
+                          return LessonRating(snap: snapshot.data!.docs);
+                        } else {
+                          return const Text('No Rating...');
+                        }
+                      },
+                    )
                   ],
                 ))
               ],
+            ),
           ),
-        ),
-      )
-    );
+        ));
   }
 }
