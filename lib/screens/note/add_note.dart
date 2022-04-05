@@ -3,7 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class AddNote extends StatefulWidget {
-  const AddNote({Key? key}) : super(key: key);
+  final String categoryId;
+  final String heading;
+
+  const AddNote({Key? key, required this.categoryId, required this.heading}) : super(key: key);
 
   @override
   State<AddNote> createState() => _AddNoteState();
@@ -143,6 +146,8 @@ class _AddNoteState extends State<AddNote> {
         .collection('notes');
 
     var data = {
+      'categoryId': widget.categoryId,
+      'heading': widget.heading,
       'title' : title,
       'description': des,
       'created': DateTime.now(),

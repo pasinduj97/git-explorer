@@ -34,25 +34,25 @@ class _NotesState extends State<Notes> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xff251F34),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context)
-              .push(
-            MaterialPageRoute(
-              builder: (context) => AddNote(),
-            ),
-          )
-              .then((value) {
-            print("Calling Set  State !");
-            setState(() {});
-          });
-        },
-        child: Icon(
-          Icons.add,
-          color: Colors.white70,
-        ),
-        backgroundColor: const Color(0xff14DAE2),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     Navigator.of(context)
+      //         .push(
+      //       MaterialPageRoute(
+      //         builder: (context) => AddNote(),
+      //       ),
+      //     )
+      //         .then((value) {
+      //       print("Calling Set  State !");
+      //       setState(() {});
+      //     });
+      //   },
+      //   child: Icon(
+      //     Icons.add,
+      //     color: Colors.white70,
+      //   ),
+      //   backgroundColor: const Color(0xff14DAE2),
+      // ),
       //
       appBar: AppBar(
         title: Text(
@@ -104,7 +104,7 @@ class _NotesState extends State<Notes> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "${data['title']}",
+                            "${data['title']}" + " (${data['heading']})" ,
                             style: const TextStyle(
                               fontSize: 24.0,
                               fontWeight: FontWeight.bold,
