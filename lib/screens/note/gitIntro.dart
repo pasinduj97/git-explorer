@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:git_explorer/screens/note/add_note.dart';
 
 class GitIntro extends StatefulWidget {
+  final String categoryId;
   final String heading;
   final String description;
 
-  const GitIntro({Key? key, required this.heading, required this.description}) : super(key: key);
+  const GitIntro({Key? key, required this.categoryId, required this.heading, required this.description}) : super(key: key);
 
   @override
   State<GitIntro> createState() => _GitIntroState();
@@ -37,15 +38,7 @@ class _GitIntroState extends State<GitIntro> {
                   children: [
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.of(context)
-                        .push(
-                          MaterialPageRoute(
-                            builder: (context) => AddNote(),
-                          ),
-                        ).then((value) {
-                          print("Calling Set  State !");
-                          setState(() {});
-                        });
+
                         // Navigator.of(context).pop();
                       },
                       style: ButtonStyle(
@@ -63,7 +56,12 @@ class _GitIntroState extends State<GitIntro> {
                         Navigator.of(context)
                             .push(
                           MaterialPageRoute(
-                            builder: (context) => AddNote(),
+                            builder: (context) => AddNote(
+                                categoryId:
+                                widget.categoryId,
+                                heading:
+                                widget.heading
+                            ),
                           ),
                         ).then((value) {
                           print("Calling Set  State !");

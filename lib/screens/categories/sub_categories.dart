@@ -57,8 +57,11 @@ class _SubCategoryState extends State<SubCategory> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => GitIntro(heading:
-                                        snapshot.data!.docs[index].get('name'),
+                                        builder: (context) => GitIntro(
+                                            categoryId:
+                                            widget.subCategoryId,
+                                            heading:
+                                            snapshot.data!.docs[index].get('name'),
                                             description:
                                             snapshot.data!.docs[index].get('description'))));
                               },

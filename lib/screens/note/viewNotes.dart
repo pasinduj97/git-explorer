@@ -41,13 +41,21 @@ class _ViewNotesState extends State<ViewNotes> {
                   children: [
                     Form(key: key, child: Column(
                       children: [
-                        const Align(
+                         edit ? const Align(
                           child: Text(
                             "Enter your title: ",
                             style: TextStyle(fontSize: 18, color: Colors.cyan),
                           ),
                           alignment: Alignment.centerLeft,
-                        ),
+                        ) :
+                         const Align(
+                           child: Text(
+                             "Title: ",
+                             style: TextStyle(fontSize: 18, color: Colors.cyan),
+                           ),
+                           alignment: Alignment.centerLeft,
+                         )
+                        ,
                         const SizedBox(
                           height: 12.0,
                         ),
@@ -83,9 +91,15 @@ class _ViewNotesState extends State<ViewNotes> {
                         const SizedBox(
                           height: 15.0,
                         ),
-                        const Align(
+                        edit ? const Align(
                           child: Text(
                             "Enter your description: ",
+                            style: TextStyle(fontSize: 18, color: Colors.cyan),
+                          ),
+                          alignment: Alignment.centerLeft,
+                        ) : const Align(
+                          child: Text(
+                            "Description: ",
                             style: TextStyle(fontSize: 18, color: Colors.cyan),
                           ),
                           alignment: Alignment.centerLeft,
