@@ -38,4 +38,32 @@ class RatingMethods {
     }
     return res;
   }
+
+  Future<String> updateRating(
+      {required double rating,
+      required String subCategoryId,
+      required String lessonId,
+      required String userId,
+      required String comment}) async {
+    String res = "Some error occurred";
+    try {
+      await _firestore
+          .collection("categories")
+          .doc(subCategoryId)
+          .collection(subCategoryId)
+          .doc(lessonId)
+          .collection('ratings')
+          .doc(userId)
+          .update({
+        "rating": rating,
+        "comment": comment,
+        "timestamp": Timestamp.fromDate(DateTime.now()),
+      });
+
+      res = 'success';
+    } catch (err) {
+      res = err.toString();
+    }
+    return res;
+  }
 }
