@@ -6,18 +6,18 @@ import 'package:git_explorer/screens/note/add_note.dart';
 import 'package:git_explorer/screens/rating/lesson_rating.dart';
 
 class GitIntro extends StatefulWidget {
+  final String categoryId;
   final String heading;
   final String description;
-  final String subCategoryId;
   final String lessonId;
 
-  const GitIntro(
-      {Key? key,
-      required this.heading,
-      required this.description,
-      required this.lessonId,
-      required this.subCategoryId})
-      : super(key: key);
+  const GitIntro({
+    Key? key,
+    required this.heading,
+    required this.description,
+    required this.lessonId,
+    required this.categoryId,
+  }) : super(key: key);
 
   @override
   State<GitIntro> createState() => _GitIntroState();
@@ -44,15 +44,6 @@ class _GitIntroState extends State<GitIntro> {
                     children: [
                       ElevatedButton(
                         onPressed: () {
-                          Navigator.of(context)
-                              .push(
-                            MaterialPageRoute(
-                              builder: (context) => AddNote(),
-                            ),
-                          )
-                              .then((value) {
-                            setState(() {});
-                          });
                           // Navigator.of(context).pop();
                         },
                         style: ButtonStyle(
@@ -72,10 +63,13 @@ class _GitIntroState extends State<GitIntro> {
                           Navigator.of(context)
                               .push(
                             MaterialPageRoute(
-                              builder: (context) => AddNote(),
+                              builder: (context) => AddNote(
+                                  categoryId: widget.categoryId,
+                                  heading: widget.heading),
                             ),
                           )
                               .then((value) {
+                            print("Calling Set  State !");
                             setState(() {});
                           });
                         },
@@ -92,7 +86,7 @@ class _GitIntroState extends State<GitIntro> {
                         ),
                       ),
                     ]),
-                SizedBox(
+                const SizedBox(
                   height: 16.0,
                 ),
                 Container(
@@ -124,8 +118,8 @@ class _GitIntroState extends State<GitIntro> {
                     StreamBuilder(
                       stream: FirebaseFirestore.instance
                           .collection('categories')
-                          .doc((widget.subCategoryId).toString())
-                          .collection((widget.subCategoryId).toString())
+                          .doc((widget.categoryId).toString())
+                          .collection((widget.categoryId).toString())
                           .doc((widget.lessonId).toString())
                           .collection('ratings')
                           .snapshots(),
@@ -141,7 +135,7 @@ class _GitIntroState extends State<GitIntro> {
                         if (snapshot != null) {
                           return LessonRating(
                               snap: snapshot.data!.docs,
-                              subCategoryId: widget.subCategoryId.toString(),
+                              subCategoryId: widget.categoryId.toString(),
                               lessonId: widget.lessonId.toString());
                         } else {
                           return const Text('No Rating...');
