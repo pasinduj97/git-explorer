@@ -139,7 +139,10 @@ class _GitIntroState extends State<GitIntro> {
                           );
                         }
                         if (snapshot != null) {
-                          return LessonRating(snap: snapshot.data!.docs);
+                          return LessonRating(
+                              snap: snapshot.data!.docs,
+                              subCategoryId: widget.subCategoryId.toString(),
+                              lessonId: widget.lessonId.toString());
                         } else {
                           return const Text('No Rating...');
                         }
