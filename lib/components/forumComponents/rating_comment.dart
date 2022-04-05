@@ -5,18 +5,45 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:git_explorer/services/forum_methods.dart';
 import 'package:intl/intl.dart';
 
-class RatingComment extends StatelessWidget {
-  final ratingDoc;
+class RatingComment extends StatefulWidget {
+  final rating;
   final comment;
+  final date;
+  final id;
 
-  const RatingComment({
+  RatingComment({
     Key? key,
-    required this.ratingDoc,
+    required this.rating,
     required this.comment,
+    required this.date,
+    required this.id,
   }) : super(key: key);
+  State<RatingComment> createState() => _RatingCommentState();
+}
+
+class _RatingCommentState extends State<RatingComment> {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  String profileImage = '';
+  String userName = '';
+
+  getUser() async {
+    DocumentSnapshot user =
+        await _firestore.collection('users').doc(widget.id).get();
+
+    Map<String, dynamic> userData = user.data() as Map<String, dynamic>;
+    if (userData != null) {
+      setState(() {
+        profileImage = userData['photoUrl'] != null
+            ? userData['photoUrl']
+            : 'https://i.stack.imgur.com/l60Hf.png';
+        userName = userData['username'];
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    getUser();
     return Container(
       padding: const EdgeInsets.all(10),
       child: Column(
@@ -26,8 +53,7 @@ class RatingComment extends StatelessWidget {
             // mainAxisAlignment: MainAxisAlignment.end,
             children: [
               CircleAvatar(
-                backgroundImage:
-                    NetworkImage('https://i.stack.imgur.com/l60Hf.png'),
+                backgroundImage: NetworkImage(profileImage),
                 radius: 18,
               ),
               Expanded(
@@ -37,17 +63,14 @@ class RatingComment extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text('Avishka Shyaman',
+                          Text(userName,
                               style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white)),
                           Padding(
                             padding: const EdgeInsets.only(top: 4),
                             child: Text(
-                              '12/03/2022',
-                              // DateFormat.yMMMd().format(
-                              //   widget.snap.data()['datePublished'].toDate(),
-                              // ),
+                              DateFormat.yMMMd().format(widget.date),
                               style: const TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w400,
@@ -57,7 +80,7 @@ class RatingComment extends StatelessWidget {
                         ],
                       ))),
               RatingBar.builder(
-                initialRating: ratingDoc.toDouble(),
+                initialRating: widget.rating.toDouble(),
                 minRating: 1,
                 direction: Axis.horizontal,
                 allowHalfRating: true,
@@ -75,7 +98,7 @@ class RatingComment extends StatelessWidget {
           Container(
             alignment: Alignment.centerLeft,
             padding: const EdgeInsets.only(top: 10, right: 10),
-            child: Text(comment,
+            child: Text(widget.comment,
                 textAlign: TextAlign.start,
                 style: const TextStyle(color: Colors.white, fontSize: 14)),
           ),
