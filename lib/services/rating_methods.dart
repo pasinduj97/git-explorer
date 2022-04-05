@@ -66,4 +66,26 @@ class RatingMethods {
     }
     return res;
   }
+
+  Future<String> deleteRating({
+    required String subCategoryId,
+    required String lessonId,
+    required String userId,
+  }) async {
+    String res = "Some error occurred";
+    try {
+      await _firestore
+          .collection("categories")
+          .doc(subCategoryId)
+          .collection(subCategoryId)
+          .doc(lessonId)
+          .collection('ratings')
+          .doc(userId)
+          .delete();
+      res = 'success';
+    } catch (err) {
+      res = err.toString();
+    }
+    return res;
+  }
 }
