@@ -54,7 +54,7 @@ class _SubCategoryState extends State<SubCategory> {
                           margin: EdgeInsets.all(5.0),
                           child: GestureDetector(
                               onTap: () {
-                                Navigator.push(
+                                  Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => GitIntro(
@@ -63,7 +63,7 @@ class _SubCategoryState extends State<SubCategory> {
                                             heading:
                                             snapshot.data!.docs[index].get('name'),
                                             description:
-                                            snapshot.data!.docs[index].get('description'))));
+                                            snapshot.data!.docs[index].get('description'), lessonId: snapshot.data!.docs[index].reference.id,)));
                               },
                               child: Container(
                                   margin: EdgeInsets.all(2.0),

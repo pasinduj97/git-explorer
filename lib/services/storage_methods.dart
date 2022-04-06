@@ -43,6 +43,24 @@ class StorageMethods {
     return downloadUrl;
   }
 
+  Future<String> uploadCertificate(
+      Uint8List file,
+      String uid
+      ) async {
+
+    Reference ref =
+    _storage.ref().child('certificate').child(uid);
+
+    String id = const Uuid().v1();
+    ref = ref.child(id);
+
+    UploadTask uploadTask = ref.putData(file);
+
+    TaskSnapshot snapshot = await uploadTask;
+    String downloadUrl = await snapshot.ref.getDownloadURL();
+    return downloadUrl;
+  }
+
 }
 
 

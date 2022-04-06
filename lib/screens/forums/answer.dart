@@ -32,7 +32,7 @@ class _AnswerState extends State<Answer> {
     setState(() {
       userProPic = doc.get("photoUrl").toString();
     });
-    
+
   }
   
   @override
