@@ -3,7 +3,9 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:git_explorer/components/forumComponents/rating_comment.dart';
 import 'package:git_explorer/screens/note/add_note.dart';
+import 'package:git_explorer/screens/rating/lesson_rating.dart';
 
 class GitIntro extends StatefulWidget {
   final String categoryId;
@@ -190,6 +192,37 @@ class _GitIntroState extends State<GitIntro> {
                         ),
                       ),
                     ),
+                    const Divider(
+                      thickness: 1,
+                      height: 30,
+                    ),
+                    StreamBuilder(
+                      stream: FirebaseFirestore.instance
+                          .collection('categories')
+                          .doc((widget.categoryId).toString())
+                          .collection((widget.categoryId).toString())
+                          .doc((widget.lessonId).toString())
+                          .collection('ratings')
+                          .snapshots(),
+                      builder: (context,
+                          AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                              snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                        if (snapshot != null) {
+                          return LessonRating(
+                              snap: snapshot.data!.docs,
+                              subCategoryId: widget.categoryId.toString(),
+                              lessonId: widget.lessonId.toString());
+                        } else {
+                          return const Text('No Rating...');
+                        }
+                      },
+                    )
                   ],
                 ))
               ],
