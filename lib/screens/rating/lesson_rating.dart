@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:git_explorer/components/forumComponents/rating_comment.dart';
-import 'package:git_explorer/services/rating_methods.dart';
+import 'package:git_explorer/screens/rating/rating_button.dart';
 
 class LessonRating extends StatefulWidget {
   final snap;
@@ -22,135 +21,17 @@ class LessonRating extends StatefulWidget {
 }
 
 class _LessonRatingState extends State<LessonRating> {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  double allRating = 3.3;
+  double allRating = 0;
   bool isUserRated = false;
   double currentUserRating = 0.0;
   String currentUserComment = '';
 
-  onRatingUpdate(rating) {
-    setState(() {
-      allRating = rating;
-    });
-  }
-
-  onRatingSubmit() async {
-    if (isUserRated) {
-      await RatingMethods().updateRating(
-          comment: currentUserComment,
-          userId: _auth.currentUser!.uid,
-          rating: currentUserRating,
-          subCategoryId: widget.subCategoryId,
-          lessonId: widget.lessonId);
-    } else {
-      await RatingMethods().postRating(
-          comment: currentUserComment,
-          rating: currentUserRating,
-          subCategoryId: widget.subCategoryId,
-          lessonId: widget.lessonId);
-    }
-    Navigator.of(context).pop();
-  }
-
-  onRatingDetele() async {
-    await RatingMethods().deleteRating(
-        userId: _auth.currentUser!.uid,
-        subCategoryId: widget.subCategoryId,
-        lessonId: widget.lessonId);
-    Navigator.of(context).pop();
-  }
-
-  showRatingDialog() => showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text('Rate this Post'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text('Tell others what you think'),
-              const SizedBox(
-                height: 16,
-              ),
-              Center(
-                child: RatingBar.builder(
-                  initialRating: currentUserRating,
-                  minRating: 2,
-                  direction: Axis.horizontal,
-                  allowHalfRating: true,
-                  itemCount: 5,
-                  itemSize: 30.0,
-                  itemPadding: const EdgeInsets.symmetric(horizontal: 2.0),
-                  itemBuilder: (context, _) => const Icon(
-                    Icons.star,
-                    color: Colors.blue,
-                  ),
-                  onRatingUpdate: (rating) {
-                    setState(() {
-                      currentUserRating = rating;
-                    });
-                  },
-                ),
-              ),
-              const Align(
-                child: Text(
-                  "Enter your title: ",
-                  style: TextStyle(fontSize: 12, color: Colors.black),
-                ),
-                alignment: Alignment.centerLeft,
-              ),
-              const SizedBox(
-                height: 12.0,
-              ),
-              TextFormField(
-                controller: TextEditingController(text: currentUserComment),
-                maxLines: 2,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                  ),
-                  filled: false,
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blue, width: 1.0),
-                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                  ),
-                ),
-                style: const TextStyle(
-                  fontSize: 14.0,
-                  color: Colors.black,
-                ),
-                onChanged: (_val) {
-                  // setState(() {
-                  currentUserComment = _val;
-                  // });
-                },
-                validator: (_val) {
-                  if (_val!.isEmpty) {
-                    return "Input field cannot be empty!";
-                  } else {
-                    return null;
-                  }
-                },
-              ),
-            ],
-          ),
-          actions: <Widget>[
-            if (isUserRated)
-              TextButton(
-                child: const Text('Delete'),
-                onPressed: onRatingDetele,
-              ),
-            TextButton(
-                child: Text(isUserRated ? 'Update' : 'Submit'),
-                onPressed: onRatingSubmit),
-          ],
-        ),
-      );
-
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
+
     final numberOfRating = widget.snap.length;
     if (numberOfRating > 0) {
       double sumOfAllRating = 0.0;
@@ -172,11 +53,22 @@ class _LessonRatingState extends State<LessonRating> {
         allRating = sumOfAllRating / numberOfRating;
       });
     }
+  }
 
-    print('rated');
-    print(isUserRated);
-    print(_auth.currentUser!.uid);
+  @override
+  void dispose() {
+    super.dispose();
+    print('LessonRating dispose');
+  }
 
+  onRatingUpdate(rating) {
+    setState(() {
+      allRating = rating;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
         width: double.infinity,
         padding: const EdgeInsets.only(
@@ -186,9 +78,6 @@ class _LessonRatingState extends State<LessonRating> {
           children: [
             Container(
                 width: double.infinity,
-                // padding: const EdgeInsets.only(
-                //   // left: 8,
-                // ),
                 child: const Text('Rating and Reviews',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
@@ -198,8 +87,6 @@ class _LessonRatingState extends State<LessonRating> {
               width: double.infinity,
               padding: const EdgeInsets.only(
                 top: 8,
-                // left: 10,
-                // right: 10,
               ),
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -231,7 +118,7 @@ class _LessonRatingState extends State<LessonRating> {
                               ),
                               onRatingUpdate: (rating) {},
                             ),
-                            Text("  Votes: $numberOfRating",
+                            Text("  Votes: ${widget.snap.length}",
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 12,
@@ -242,28 +129,12 @@ class _LessonRatingState extends State<LessonRating> {
                     Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          ElevatedButton(
-                            onPressed: () {
-                              showRatingDialog();
-                            },
-                            child: Text(
-                                '${isUserRated ? 'Update' : 'Add'} Your Rating'),
-                          ),
-                          // RatingBar.builder(
-                          //   initialRating: rating,
-                          //   minRating: 1,
-                          //   direction: Axis.horizontal,
-                          //   allowHalfRating: true,
-                          //   itemCount: 5,
-                          //   itemSize: 15.0,
-                          //   itemPadding:
-                          //       const EdgeInsets.symmetric(horizontal: 1.0),
-                          //   itemBuilder: (context, _) => const Icon(
-                          //     Icons.star,
-                          //     color: Colors.blue,
-                          //   ),
-                          //   onRatingUpdate: onRatingUpdate,
-                          // )
+                          RatingButton(
+                              lessonId: widget.lessonId,
+                              isUserRated: isUserRated,
+                              subCategoryId: widget.subCategoryId,
+                              currentUserRating: currentUserRating,
+                              currentUserComment: currentUserComment)
                         ])
                   ]),
             ),
