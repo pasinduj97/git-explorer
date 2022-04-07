@@ -27,10 +27,11 @@ class _RatingButtonState extends State<RatingButton> {
   late FirebaseAuth _auth = FirebaseAuth.instance;
 
   late TextEditingController controller;
-  // TextEditingController controller = TextEditingController();
 
   double currentUserRating = 0.0;
   String currentUserComment = '';
+  String buttonDisplayText = 'Add Your Rating';
+  bool isUserRated = false;
 
   String codeDialog = '';
   String valueText = '';
@@ -38,11 +39,15 @@ class _RatingButtonState extends State<RatingButton> {
   @override
   void initState() {
     super.initState();
-    print('user widget.isUserRated');
+    print('user widget.isUserRated ');
     print(widget.isUserRated);
     if (widget.isUserRated) {
-      currentUserRating = widget.currentUserRating;
-      currentUserComment = widget.currentUserComment;
+      setState(() {
+        currentUserRating = widget.currentUserRating;
+        currentUserComment = widget.currentUserComment;
+        buttonDisplayText = 'Update Your Rating';
+        isUserRated = widget.isUserRated;
+      });
       controller = TextEditingController(text: widget.currentUserComment);
     } else {
       controller = TextEditingController();
@@ -57,7 +62,7 @@ class _RatingButtonState extends State<RatingButton> {
 
   onRatingSubmit() async {
     // Navigator.of(context).pop();
-    if (widget.isUserRated) {
+    if (isUserRated) {
       await RatingMethods().updateRating(
           comment: controller.text,
           userId: _auth.currentUser!.uid,
@@ -83,7 +88,7 @@ class _RatingButtonState extends State<RatingButton> {
     controller.clear();
   }
 
-  showRatingDialog(context) => showDialog(
+  Future<String?> showRatingDialog(context) => showDialog<String>(
         context: context,
         builder: (context) => AlertDialog(
           title: const Text('Rate this Post'),
@@ -127,7 +132,6 @@ class _RatingButtonState extends State<RatingButton> {
               ),
               TextField(
                 controller: controller,
-                // maxLines: 2,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(5.0)),
@@ -146,19 +150,19 @@ class _RatingButtonState extends State<RatingButton> {
             ],
           ),
           actions: <Widget>[
-            if (widget.isUserRated)
+            if (isUserRated)
               TextButton(
                 child: const Text('Delete'),
                 onPressed: () {
                   onRatingDetele();
-                  Navigator.of(context).pop();
+                  Navigator.of(context).pop('delete');
                 },
               ),
             TextButton(
-                child: Text(widget.isUserRated ? 'Update' : 'Submit'),
+                child: Text(isUserRated ? 'Update' : 'Submit'),
                 onPressed: () {
                   onRatingSubmit();
-                  Navigator.of(context).pop();
+                  Navigator.of(context).pop(isUserRated ? 'Update' : 'Submit');
                 }),
           ],
         ),
@@ -209,11 +213,21 @@ class _RatingButtonState extends State<RatingButton> {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {
-        showRatingDialog(context);
+      onPressed: () async {
+        final action = await showRatingDialog(context);
+
+        if (action == 'delete') {
+          setState(() {
+            buttonDisplayText = 'Add Your Rating';
+          });
+        } else {
+          setState(() {
+            buttonDisplayText = 'Update Your Rating';
+          });
+        }
         // _displayTextInputDialog(context);
       },
-      child: Text('${widget.isUserRated ? 'Update' : 'Add'} Your Rating'),
+      child: Text(buttonDisplayText),
     );
   }
 }
