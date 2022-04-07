@@ -33,9 +33,6 @@ class _RatingButtonState extends State<RatingButton> {
   String buttonDisplayText = 'Add Your Rating';
   bool isUserRated = false;
 
-  String codeDialog = '';
-  String valueText = '';
-
   @override
   void initState() {
     super.initState();
@@ -167,48 +164,6 @@ class _RatingButtonState extends State<RatingButton> {
           ],
         ),
       );
-
-  Future<void> _displayTextInputDialog(BuildContext context) async {
-    return showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text('TextField in Dialog'),
-            content: TextField(
-              onChanged: (value) {
-                // setState(() {
-                valueText = value;
-                // });
-              },
-              controller: controller,
-              decoration: InputDecoration(hintText: "Text Field in Dialog"),
-            ),
-            actions: <Widget>[
-              FlatButton(
-                color: Colors.red,
-                textColor: Colors.white,
-                child: Text('CANCEL'),
-                onPressed: () {
-                  // setState(() {
-                  Navigator.pop(context);
-                  // });
-                },
-              ),
-              FlatButton(
-                color: Colors.green,
-                textColor: Colors.white,
-                child: Text('OK'),
-                onPressed: () {
-                  // setState(() {
-                  codeDialog = valueText;
-                  Navigator.pop(context);
-                  // });
-                },
-              ),
-            ],
-          );
-        });
-  }
 
   @override
   Widget build(BuildContext context) {
