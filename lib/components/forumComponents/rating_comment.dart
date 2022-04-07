@@ -24,7 +24,12 @@ class RatingComment extends StatefulWidget {
 class _RatingCommentState extends State<RatingComment> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   String profileImage = '';
-  String userName = '';
+  String userName = 'Loading...';
+
+  @override
+  void initState() {
+    getUser();
+  }
 
   getUser() async {
     DocumentSnapshot user =
@@ -33,9 +38,8 @@ class _RatingCommentState extends State<RatingComment> {
     Map<String, dynamic> userData = user.data() as Map<String, dynamic>;
     if (userData != null) {
       setState(() {
-        profileImage = userData['photoUrl'] != null
-            ? userData['photoUrl']
-            : 'https://i.stack.imgur.com/l60Hf.png';
+        profileImage =
+            userData['photoUrl'] ?? 'https://i.stack.imgur.com/l60Hf.png';
         userName = userData['username'];
       });
     }
@@ -43,7 +47,6 @@ class _RatingCommentState extends State<RatingComment> {
 
   @override
   Widget build(BuildContext context) {
-    getUser();
     return Container(
       padding: const EdgeInsets.all(10),
       child: Column(
