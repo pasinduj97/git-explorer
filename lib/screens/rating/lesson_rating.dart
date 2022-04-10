@@ -31,8 +31,27 @@ class _LessonRatingState extends State<LessonRating> {
   @override
   void initState() {
     super.initState();
+  }
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  onRatingUpdate(rating) {
+    setState(() {
+      allRating = rating;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final numberOfRating = widget.snap.length;
+    setState(() {
+      allRating = 0.0;
+      isUserRated = false;
+    });
+
     if (numberOfRating > 0) {
       double sumOfAllRating = 0.0;
       for (var rateRowItem in widget.snap) {
@@ -53,22 +72,7 @@ class _LessonRatingState extends State<LessonRating> {
         allRating = sumOfAllRating / numberOfRating;
       });
     }
-  }
 
-  @override
-  void dispose() {
-    super.dispose();
-    print('LessonRating dispose');
-  }
-
-  onRatingUpdate(rating) {
-    setState(() {
-      allRating = rating;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return Container(
         width: double.infinity,
         padding: const EdgeInsets.only(

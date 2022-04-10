@@ -28,49 +28,35 @@ class _RatingButtonState extends State<RatingButton> {
 
   late TextEditingController controller;
 
-  double currentUserRating = 0.0;
-  String currentUserComment = '';
-  String buttonDisplayText = 'Add Your Rating';
-  bool isUserRated = false;
+  double _currentUserRating = 0.0;
+  bool _isUserRated = false;
+  // String buttonDisplayText = 'Add Your Rating';
 
   @override
-  void initState() {
-    super.initState();
-    print('user widget.isUserRated ');
-    print(widget.isUserRated);
-    if (widget.isUserRated) {
-      setState(() {
-        currentUserRating = widget.currentUserRating;
-        currentUserComment = widget.currentUserComment;
-        buttonDisplayText = 'Update Your Rating';
-        isUserRated = widget.isUserRated;
-      });
-      controller = TextEditingController(text: widget.currentUserComment);
-    } else {
-      controller = TextEditingController();
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
     }
   }
 
   @override
-  void dispose() {
-    super.dispose();
-    print('RatingButton dispose');
+  void initState() {
+    super.initState();
   }
 
   onRatingSubmit() async {
     // Navigator.of(context).pop();
-    if (isUserRated) {
+    if (_isUserRated) {
       await RatingMethods().updateRating(
           comment: controller.text,
           userId: _auth.currentUser!.uid,
-          rating: currentUserRating,
+          rating: _currentUserRating,
           subCategoryId: widget.subCategoryId,
           lessonId: widget.lessonId);
-      controller.clear();
     } else {
       await RatingMethods().postRating(
           comment: controller.text,
-          rating: currentUserRating,
+          rating: _currentUserRating,
           subCategoryId: widget.subCategoryId,
           lessonId: widget.lessonId);
     }
@@ -85,7 +71,7 @@ class _RatingButtonState extends State<RatingButton> {
     controller.clear();
   }
 
-  Future<String?> showRatingDialog(context) => showDialog<String>(
+  Future<String?> showRatingDialog() => showDialog<String>(
         context: context,
         builder: (context) => AlertDialog(
           title: const Text('Rate this Post'),
@@ -99,8 +85,8 @@ class _RatingButtonState extends State<RatingButton> {
               ),
               Center(
                 child: RatingBar.builder(
-                  initialRating: currentUserRating,
-                  minRating: 2,
+                  initialRating: _currentUserRating,
+                  minRating: 1,
                   direction: Axis.horizontal,
                   allowHalfRating: true,
                   itemCount: 5,
@@ -112,7 +98,7 @@ class _RatingButtonState extends State<RatingButton> {
                   ),
                   onRatingUpdate: (rating) {
                     // setState(() {
-                    currentUserRating = rating;
+                    _currentUserRating = rating;
                     // });
                   },
                 ),
@@ -147,7 +133,7 @@ class _RatingButtonState extends State<RatingButton> {
             ],
           ),
           actions: <Widget>[
-            if (isUserRated)
+            if (_isUserRated)
               TextButton(
                 child: const Text('Delete'),
                 onPressed: () {
@@ -156,33 +142,54 @@ class _RatingButtonState extends State<RatingButton> {
                 },
               ),
             TextButton(
-                child: Text(isUserRated ? 'Update' : 'Submit'),
+                child: Text(_isUserRated ? 'Update' : 'Submit'),
                 onPressed: () {
                   onRatingSubmit();
-                  Navigator.of(context).pop(isUserRated ? 'Update' : 'Submit');
+                  Navigator.of(context).pop(_isUserRated ? 'Update' : 'Submit');
                 }),
           ],
         ),
       );
 
+  updateState() {
+    if (widget.isUserRated) {
+      setState(() {
+        _currentUserRating = widget.currentUserRating;
+        // buttonDisplayText = 'Update Your Rating';
+        _isUserRated = true;
+      });
+      controller = TextEditingController(text: widget.currentUserComment);
+    } else {
+      controller = TextEditingController();
+      setState(() {
+        _currentUserRating = 0.0;
+        _isUserRated = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    updateState();
+
     return ElevatedButton(
       onPressed: () async {
-        final action = await showRatingDialog(context);
+        final action = await showRatingDialog();
 
         if (action == 'delete') {
           setState(() {
-            buttonDisplayText = 'Add Your Rating';
+            // buttonDisplayText = 'Add Your Rating';
+            _isUserRated = false;
           });
         } else {
           setState(() {
-            buttonDisplayText = 'Update Your Rating';
+            _isUserRated = true;
+            // buttonDisplayText = 'Update Your Rating';
           });
         }
         // _displayTextInputDialog(context);
       },
-      child: Text(buttonDisplayText),
+      child: Text('${_isUserRated ? 'Update' : 'Add'} Your Rating'),
     );
   }
 }
